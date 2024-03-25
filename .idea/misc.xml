@@ -4,13 +4,14 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/Monning_Meteorite_Gallaru/pom.xml" />
+        <!-- Removed reference to Gallaru -->
         <option value="$PROJECT_DIR$/Monning_Meteorite_Gallery/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
+      <!-- Removed reference to Gallaru -->
       <set>
-        <option value="$PROJECT_DIR$/Monning_Meteorite_Gallaru/pom.xml" />
+        <option value="$PROJECT_DIR$/Monning_Meteorite_Gallery/pom.xml" />
       </set>
     </option>
   </component>
