@@ -1,8 +1,12 @@
 package edu.tcu.cs.monning_meteorite_gallery.meteorite;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
-public class Meteorite {
+import java.io.Serializable;
+
+@Entity
+public class Meteorite implements Serializable {
 
     @Id
     private String MonnigNumber;
@@ -13,11 +17,11 @@ public class Meteorite {
 
     private String MClass;
 
-    private String Group;
+    private String MGroup;
 
-    private int year;
+    private String yearFound;
 
-    private double weight;
+    private String weight;
 
     public String getMonnigNumber() {
         return MonnigNumber;
@@ -51,27 +55,28 @@ public class Meteorite {
         this.MClass = MClass;
     }
 
-    public String getGroup() {
-        return Group;
+    public String getMGroup() {
+        return MGroup;
     }
 
-    public void setGroup(String group) {
-        Group = group;
+    public void setMGroup(String MGroup) {
+        this.MGroup = MGroup;
     }
 
-    public int getYear() {
-        return year;
+    public String getYearFound() {
+        return yearFound;
     }
 
-    public void setYear(int year) {
-        this.year = year;
+    public void setYearFound(String yearFound) {
+        this.yearFound = yearFound;
     }
 
-    public double getWeight() {
+    public String getWeight() {
         return weight;
     }
 
-    public void setWeight(double weight) {
+    public void setWeight(String weight) {
         this.weight = weight;
     }
+
 }
