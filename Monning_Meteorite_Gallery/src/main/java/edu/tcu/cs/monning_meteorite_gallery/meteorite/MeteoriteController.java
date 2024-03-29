@@ -29,4 +29,6 @@ public class MeteoriteController {
         return new Result(true, StatusCode.SUCCESS, "Found", meteoriteDto);
     }
 
+    //@GetMapping("/{")
+
 }
