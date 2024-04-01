@@ -83,4 +83,24 @@ class MeteoriteServiceTest {
         assertThat(thrown).isInstanceOf(MeteoriteNotFoundException.class).hasMessage("Could not find meteorite with monnig number M398.1" );
         verify(meteoriteRepository, times(1)).findById("M398.1");
     }
+
+    @Test
+    void testAddMeteoriteSuccess(){
+
+    }
+
+    @Test
+    void testAddMeteoriteFail(){
+
+    }
+
+    @Test
+    void testDeleteMeteoriteSuccess(){
+
+    }
+
+    @Test
+    void testDeleteMeteoriteFail(){
+
+    }
 }

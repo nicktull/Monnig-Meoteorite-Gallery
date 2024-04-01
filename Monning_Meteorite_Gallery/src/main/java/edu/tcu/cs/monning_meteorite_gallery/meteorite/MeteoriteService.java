@@ -26,4 +26,10 @@ public class MeteoriteService {
         newMeteorite.setMonnigNumber(idWorker.nextId() + "");
         return this.meteoriteRepository.save(newMeteorite);
     }
+
+    public void delete(String meteoriteId){
+        this.meteoriteRepository.findById(meteoriteId).orElseThrow(() -> new MeteoriteNotFoundException(meteoriteId));
+        this.meteoriteRepository.deleteById(meteoriteId);
+    }
 }
+

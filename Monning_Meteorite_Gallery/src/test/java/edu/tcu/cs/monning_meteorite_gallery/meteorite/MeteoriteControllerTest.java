@@ -91,4 +91,44 @@ class MeteoriteControllerTest {
         System.out.println("Request completed.");
     }
 
+    @Test
+    void testfindMeteoriteByIdFail() throws Exception{
+        // Given
+
+        // When and Then
+    }
+
+
+    @Test
+    void testAddMeteoriteSuccess() throws Exception{
+        // Given
+
+        // When
+
+        // Then
+    }
+
+    @Test
+    void testAddMeteoriteFail() throws Exception{
+        // Given
+
+        // When and Then
+    }
+
+    @Test
+    void testDeleteMeteoriteSuccess() throws Exception {
+        //Given
+
+        //When
+
+        //Then
+    }
+
+    @Test
+    void testDeleteMeteoriteFail() throws Exception {
+        // Given
+
+        // When and Then
+    }
+
 }

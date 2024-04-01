@@ -40,13 +40,15 @@ public class MeteoriteController {
         return new Result(true, StatusCode.SUCCESS, "Add Success", savedMeteoriteDto);
     }
 
+    @DeleteMapping("/{meteoriteID}")
+    public Result deleteMeteorite(@PathVariable String meteoriteID){
+        this.meteoriteService.delete(meteoriteID);
+        return new Result(true, StatusCode.SUCCESS, "Deleted");
+    }
 }
 
-//@PostMapping
-//public Result addArtifact(@Valid @RequestBody ArtifactDto artifactDto){
-//    // Convert artifactDto to artifact
-//    Artifact newArtifact = this.artifactDtoToArtifactConverter.convert(artifactDto);
-//    Artifact savedArtifact = this.artifactService.save(newArtifact);
-//    ArtifactDto savedArtifactDto = this.artifactToArtifactDtoConverter.convert(savedArtifact);
-//    return new Result(true, StatusCode.SUCCESS, "Add Success", savedArtifactDto);
+//@DeleteMapping("/{artifactId}")
+//public Result deleteArtifact(@PathVariable String artifactId){
+//    this.artifactService.delete(artifactId);
+//    return new Result(true, StatusCode.SUCCESS, "Delete Success");
 //}
