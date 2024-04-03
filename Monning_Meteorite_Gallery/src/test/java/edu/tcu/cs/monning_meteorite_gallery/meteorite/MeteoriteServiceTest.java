@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,5 +103,63 @@ class MeteoriteServiceTest {
     @Test
     void testDeleteMeteoriteFail(){
 
+    }
+
+    @Test
+    void testUpdateSuccess(){
+        // Given
+        Meteorite oldMeteorite = new Meteorite();
+
+        oldMeteorite.setName("Abott");
+        oldMeteorite.setMonnigNumber("M398.1");
+        oldMeteorite.setCountry("USA");
+        oldMeteorite.setMClass("Ordinary Chondrite");
+        oldMeteorite.setMGroup("H");
+        oldMeteorite.setYearFound("1951");
+        oldMeteorite.setWeight("325.1");
+
+        Meteorite update = new Meteorite();
+        update.setName("Abott");
+        update.setMonnigNumber("M398.1");
+        update.setCountry("USA");
+        update.setMClass("Ordinary Chondrite");
+        update.setMGroup("H");
+        update.setYearFound("2024");
+        update.setWeight("325.1");
+
+        given(meteoriteRepository.findById("M398.1")).willReturn(Optional.of(oldMeteorite));
+        given(meteoriteRepository.save(oldMeteorite)).willReturn(oldMeteorite);
+        // When
+        Meteorite updatedMeteorite = meteoriteService.update("M398.1", update);
+
+        // Then
+        assertThat(updatedMeteorite.getMonnigNumber()).isEqualTo(update.getMonnigNumber());
+        assertThat(updatedMeteorite.getYearFound()).isEqualTo(update.getYearFound());
+        verify(meteoriteRepository, times(1)).findById("M398.1");
+        verify(meteoriteRepository, times(1)).save(oldMeteorite);
+    }
+
+    //Test fail due to save not implemented
+    @Test
+    void testUpdateNotFound() {
+        // Given
+        Meteorite update = new Meteorite();
+        update.setName("Abott");
+        update.setMonnigNumber("M398.1");
+        update.setCountry("USA");
+        update.setMClass("Ordinary Chondrite");
+        update.setMGroup("H");
+        update.setYearFound("2024");
+        update.setWeight("325.1");
+
+        given(meteoriteRepository.findById("M398.1")).willReturn(Optional.empty());
+
+        // When
+        assertThrows(MethodArgumentNotValidException.class, ()->{
+            meteoriteService.update("M398.1", update);
+        });
+
+        // Then
+        verify(meteoriteRepository, times(1)).findById("M398.1");
     }
 }
