@@ -15,7 +15,6 @@ public class MeteoriteController {
 
     private final MeteoriteService meteoriteService;
     private final MeteoriteToMeteoriteDtoConverter meteoriteToMeteoriteDtoConverter;
-
     private final MeteoriteDtoToMeteoriteConverter meteoriteDtoToMeteoriteConverter;
 
     public MeteoriteController(MeteoriteService meteoriteService, MeteoriteToMeteoriteDtoConverter meteoriteToMeteoriteDtoConverter, MeteoriteDtoToMeteoriteConverter meteoriteDtoToMeteoriteConverter) {
@@ -46,9 +45,3 @@ public class MeteoriteController {
         return new Result(true, StatusCode.SUCCESS, "Deleted");
     }
 }
-
-//@DeleteMapping("/{artifactId}")
-//public Result deleteArtifact(@PathVariable String artifactId){
-//    this.artifactService.delete(artifactId);
-//    return new Result(true, StatusCode.SUCCESS, "Delete Success");
-//}

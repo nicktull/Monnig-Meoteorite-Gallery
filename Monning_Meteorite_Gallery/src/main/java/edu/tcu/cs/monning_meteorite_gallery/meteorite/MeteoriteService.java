@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class MeteoriteService {
     private final MeteoriteRepository meteoriteRepository;
 
-    private final IdWorker idWorker; //    private final IdWorker idWorker; no beans?
+    private final IdWorker idWorker;; //    private final IdWorker idWorker; no beans?
 
     public MeteoriteService(MeteoriteRepository meteoriteRepository, IdWorker idWorker) {  // Need to come back and find the beans
         this.meteoriteRepository = meteoriteRepository;
