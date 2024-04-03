@@ -4,8 +4,8 @@ public record MeteoriteDto(String MonnigNumber,
                            String Name,
                            String Country,
                            String MClass,
-                           String Group,
-                           String year,
+                           String MGroup,
+                           String yearFound,
                            String weight
                            ){
 }

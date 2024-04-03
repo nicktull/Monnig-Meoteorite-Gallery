@@ -9,58 +9,58 @@ import java.io.Serializable;
 public class Meteorite implements Serializable {
 
     @Id
-    private String MonnigNumber;
+    private String monnigNumber;
 
-    private String Name;
+    private String name;
 
-    private String Country;
+    private String country;
 
-    private String MClass;
+    private String mClass;
 
-    private String MGroup;
+    private String mGroup;
 
     private String yearFound;
 
     private String weight;
 
     public String getMonnigNumber() {
-        return MonnigNumber;
+        return monnigNumber;
     }
 
     public void setMonnigNumber(String monnigNumber) {
-        MonnigNumber = monnigNumber;
+        this.monnigNumber = monnigNumber;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public String getCountry() {
-        return Country;
+        return country;
     }
 
     public void setCountry(String country) {
-        Country = country;
+        this.country = country;
     }
 
     public String getMClass() {
-        return MClass;
+        return mClass;
     }
 
-    public void setMClass(String MClass) {
-        this.MClass = MClass;
+    public void setMClass(String mClass) {
+        this.mClass = mClass;
     }
 
     public String getMGroup() {
-        return MGroup;
+        return mGroup;
     }
 
-    public void setMGroup(String MGroup) {
-        this.MGroup = MGroup;
+    public void setMGroup(String mGroup) {
+        this.mGroup = mGroup;
     }
 
     public String getYearFound() {
@@ -78,5 +78,4 @@ public class Meteorite implements Serializable {
     public void setWeight(String weight) {
         this.weight = weight;
     }
-
 }

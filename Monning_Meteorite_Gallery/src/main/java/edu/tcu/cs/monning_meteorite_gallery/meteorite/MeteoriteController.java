@@ -1,6 +1,5 @@
 package edu.tcu.cs.monning_meteorite_gallery.meteorite;
 
-
 import edu.tcu.cs.monning_meteorite_gallery.System.Result;
 import edu.tcu.cs.monning_meteorite_gallery.System.StatusCode;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.converter.MeteoriteDtoToMeteoriteConverter;
@@ -9,8 +8,11 @@ import edu.tcu.cs.monning_meteorite_gallery.meteorite.dto.MeteoriteDto;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
-@RequestMapping("/api/v1/meteorites/")
+@RequestMapping("/api/v1/meteorites")
 public class MeteoriteController {
 
     private final MeteoriteService meteoriteService;
@@ -23,9 +25,9 @@ public class MeteoriteController {
         this.meteoriteDtoToMeteoriteConverter = meteoriteDtoToMeteoriteConverter;
     }
 
-    @GetMapping("/{meteoriteID}")
-    public Result findMeteoriteById(@PathVariable String meteoriteID){
-        Meteorite foundMeteorite = this.meteoriteService.findByID(meteoriteID);
+    @GetMapping("/{meteoriteId}")
+    public Result findMeteoriteById(@PathVariable String meteoriteId){
+        Meteorite foundMeteorite = this.meteoriteService.findByID(meteoriteId);
         MeteoriteDto meteoriteDto = this.meteoriteToMeteoriteDtoConverter.convert(foundMeteorite);
         return new Result(true, StatusCode.SUCCESS, "Found", meteoriteDto);
     }
@@ -39,9 +41,12 @@ public class MeteoriteController {
         return new Result(true, StatusCode.SUCCESS, "Add Success", savedMeteoriteDto);
     }
 
-    @PutMapping("/{meteoriteID}")
-    public Result updateArtifact(@PathVariable String meteoriteId, @RequestBody @Valid MeteoriteDto meteoriteDto){
-        return null;
+    @PutMapping("/{meteoriteId}")
+    public Result updateMeteorite(@PathVariable String meteoriteId, @Valid @RequestBody MeteoriteDto meteoriteDto){
+        Meteorite update = this.meteoriteDtoToMeteoriteConverter.convert(meteoriteDto);
+        Meteorite updatedMeteorite = this.meteoriteService.update(meteoriteId, update);
+        MeteoriteDto updatedMeteoriteDto = this.meteoriteToMeteoriteDtoConverter.convert(updatedMeteorite);
+        return new Result(true, StatusCode.SUCCESS, "Update Success", updatedMeteoriteDto);
     }
 
     @DeleteMapping("/{meteoriteId}")
