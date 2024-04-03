@@ -31,7 +31,7 @@ public class MeteoriteController {
     }
 
     @PostMapping
-    public Result addMeteorite(@Validated @RequestBody MeteoriteDto meteoriteDto){
+    public Result addMeteorite(@Valid @RequestBody MeteoriteDto meteoriteDto){
         // Convert MeteoriteDto to meteorite
         Meteorite newMeteorite = this.meteoriteDtoToMeteoriteConverter.convert(meteoriteDto);
         Meteorite savedMeteorite = this.meteoriteService.save(newMeteorite);

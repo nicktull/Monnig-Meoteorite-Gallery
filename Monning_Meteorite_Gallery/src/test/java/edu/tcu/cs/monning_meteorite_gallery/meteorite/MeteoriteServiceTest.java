@@ -164,7 +164,6 @@ class MeteoriteServiceTest {
         verify(meteoriteRepository, times(1)).save(oldMeteorite);
     }
 
-    //Test fail due to save not implemented
     @Test
     void testUpdateNotFound() {
         // Given
@@ -180,7 +179,7 @@ class MeteoriteServiceTest {
         given(meteoriteRepository.findById("M398.1")).willReturn(Optional.empty());
 
         // When
-        assertThrows(MethodArgumentNotValidException.class, ()->{
+        assertThrows(MeteoriteNotFoundException.class, ()->{
             meteoriteService.update("M398.1", update);
         });
 
