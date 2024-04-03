@@ -87,13 +87,38 @@ class MeteoriteServiceTest {
 
     @Test
     void testAddMeteoriteSuccess(){
+        //Given
+        Meteorite newMeteorite = new Meteorite();
+        newMeteorite.setMonnigNumber("M33.1");
+        newMeteorite.setName("Nick's Meteor");
+        newMeteorite.setCountry("");
+        newMeteorite.setMClass("M33.1");
+        newMeteorite.setMGroup("M33.1");
+        newMeteorite.setMonnigNumber("M33.1");
 
     }
 
-    @Test
-    void testAddMeteoriteFail(){
-
-    }
+//    @Test
+//    void testSaveSuccess(){
+//        //Given
+//        Artifact newArtifact = new Artifact();
+//        newArtifact.setName("Artifact 3");
+//        newArtifact.setDescription("Description");
+//        newArtifact.setImageURL("ImageUrl...");
+//
+//        given(idWorker.nextId()).willReturn(123456L);
+//        given(artifactRepository.save(newArtifact)).willReturn(newArtifact);
+//
+//        //When
+//        Artifact savedArtifact = artifactService.save(newArtifact);
+//
+//        //Then
+//        assertThat(savedArtifact.getId()).isEqualTo("123456");
+//        assertThat(savedArtifact.getName()).isEqualTo(newArtifact.getName());
+//        assertThat(savedArtifact.getDescription()).isEqualTo(newArtifact.getDescription());
+//        assertThat(savedArtifact.getImageURL()).isEqualTo(newArtifact.getImageURL());
+//        verify(artifactRepository, times(1)).save(newArtifact);
+//    }
 
     @Test
     void testDeleteMeteoriteSuccess(){

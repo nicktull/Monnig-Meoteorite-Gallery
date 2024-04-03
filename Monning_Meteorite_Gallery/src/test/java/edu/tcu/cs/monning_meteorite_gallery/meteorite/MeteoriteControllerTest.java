@@ -14,8 +14,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+<<<<<<< Updated upstream
 import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+=======
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+>>>>>>> Stashed changes
 
 import static org.mockito.BDDMockito.given;
 
@@ -23,7 +28,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+<<<<<<< Updated upstream
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+=======
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+>>>>>>> Stashed changes
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
@@ -107,33 +116,68 @@ class MeteoriteControllerTest {
     @Test
     void testAddMeteoriteSuccess() throws Exception{
         // Given
+        MeteoriteDto meteoriteDto = new MeteoriteDto(
+                "M33.1",
+                "Nick's Meteor",
+                "United States",
+                "Nicks",
+                "Web Tech",
+                "2024",
+                "500");
 
-        // When
+        String json = this.objectMapper.writeValueAsString(meteoriteDto);
 
-        // Then
-    }
+        Meteorite savedMeteorite = new Meteorite();
+        savedMeteorite.setMonnigNumber("M33.1");
+        savedMeteorite.setName("Nick's Meteor");
+        savedMeteorite.setCountry("United States");
+        savedMeteorite.setMClass("Nicks");
+        savedMeteorite.setMGroup("Web Tech");
+        savedMeteorite.setYearFound("2024");
+        savedMeteorite.setWeight("500");
 
-    @Test
-    void testAddMeteoriteFail() throws Exception{
-        // Given
+        given(this.meteoriteService.save(Mockito.any(Meteorite.class))).willReturn(savedMeteorite);
 
         // When and Then
+        this.mockMvc.perform(post("/api/v1/meteorites/").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.flag").value(true))
+                .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
+                .andExpect(jsonPath("$.message").value("Add Success"))
+                .andExpect(jsonPath("$.data.MonnigNumber").isNotEmpty())
+                .andExpect(jsonPath("$.data.name").value(savedMeteorite.getName()))
+                .andExpect(jsonPath("$.data.country").value(savedMeteorite.getCountry()))
+                .andExpect(jsonPath("$.data.class").value(savedMeteorite.getMClass()))
+                .andExpect(jsonPath("$.data.group").value(savedMeteorite.getMGroup()))
+                .andExpect(jsonPath("$.data.year").value(savedMeteorite.getYearFound()))
+                .andExpect(jsonPath("$.data.weight").value(savedMeteorite.getWeight()));
+
     }
 
     @Test
     void testDeleteMeteoriteSuccess() throws Exception {
         //Given
+        doNothing().when(this.meteoriteService).delete("M398.1");
 
-        //When
-
-        //Then
+        //When and Then
+        this.mockMvc.perform(delete("/api/v1/meteorites/M398.1").accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.flag").value(true))
+                .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
+                .andExpect(jsonPath("$.message").value("Delete Success"))
+                .andExpect(jsonPath("$.data").isEmpty());
     }
 
     @Test
     void testDeleteMeteoriteFail() throws Exception {
         // Given
+        doThrow(new MeteoriteNotFoundException("M398.1")).when(this.meteoriteService).delete("M398.1");
 
         // When and Then
+        this.mockMvc.perform(delete("/api/v1/meteorites/M398.1").accept(MediaType.APPLICATION_JSON))
+                  .andExpect(jsonPath("$.flag").value(false))
+                  .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
+                  .andExpect(jsonPath("$.message").value("Could not find meteorite with Id M398.1 :("))
+                  .andExpect(jsonPath("$.data").isEmpty());
+
     }
 
 //    @Test
