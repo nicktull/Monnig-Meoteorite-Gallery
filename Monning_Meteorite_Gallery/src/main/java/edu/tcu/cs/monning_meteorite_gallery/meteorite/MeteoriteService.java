@@ -31,5 +31,20 @@ public class MeteoriteService {
         this.meteoriteRepository.findById(meteoriteId).orElseThrow(() -> new MeteoriteNotFoundException(meteoriteId));
         this.meteoriteRepository.deleteById(meteoriteId);
     }
+
+    public Meteorite update(String meteoriteId, Meteorite update){
+        return this.meteoriteRepository.findById(meteoriteId)
+                .map(oldMeteorite ->{
+                    oldMeteorite.setName(update.getName());
+                    oldMeteorite.setYearFound(update.getYearFound());
+                    oldMeteorite.setCountry(update.getCountry());
+                    oldMeteorite.setMClass(update.getMClass());
+                    oldMeteorite.setMGroup(update.getMGroup());
+                    oldMeteorite.setWeight(update.getWeight());
+                    return this.meteoriteRepository.save(oldMeteorite);
+                })
+                .orElseThrow(() -> new MeteoriteNotFoundException(meteoriteId));
+
+    }
 }
 
