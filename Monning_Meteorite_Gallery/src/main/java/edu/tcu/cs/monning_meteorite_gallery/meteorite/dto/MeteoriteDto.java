@@ -7,5 +7,6 @@ public record MeteoriteDto(String MonnigNumber,
                            String MGroup,
                            String yearFound,
                            String weight
+                           //add loan
                            ){
 }
