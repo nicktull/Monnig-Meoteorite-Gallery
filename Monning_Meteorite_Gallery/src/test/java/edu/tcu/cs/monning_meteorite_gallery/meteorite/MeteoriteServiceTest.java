@@ -96,38 +96,58 @@ class MeteoriteServiceTest {
         newMeteorite.setMGroup("M33.1");
         newMeteorite.setMonnigNumber("M33.1");
 
-    }
+        given(idWorker.nextId()).willReturn("M33.1");
+        given(meteoriteRepository.save(newMeteorite)).willReturn(newMeteorite);
 
-//    @Test
-//    void testSaveSuccess(){
-//        //Given
-//        Artifact newArtifact = new Artifact();
-//        newArtifact.setName("Artifact 3");
-//        newArtifact.setDescription("Description");
-//        newArtifact.setImageURL("ImageUrl...");
-//
-//        given(idWorker.nextId()).willReturn(123456L);
-//        given(artifactRepository.save(newArtifact)).willReturn(newArtifact);
-//
-//        //When
-//        Artifact savedArtifact = artifactService.save(newArtifact);
-//
-//        //Then
-//        assertThat(savedArtifact.getId()).isEqualTo("123456");
-//        assertThat(savedArtifact.getName()).isEqualTo(newArtifact.getName());
-//        assertThat(savedArtifact.getDescription()).isEqualTo(newArtifact.getDescription());
-//        assertThat(savedArtifact.getImageURL()).isEqualTo(newArtifact.getImageURL());
-//        verify(artifactRepository, times(1)).save(newArtifact);
-//    }
+        // When
+        Meteorite savedMeteorite = meteoriteService.save(newMeteorite);
+
+        // Then
+        assertThat(savedMeteorite.getMonnigNumber()).isEqualTo("M33.1");
+        assertThat(savedMeteorite.getName()).isEqualTo(newMeteorite.getName());
+        assertThat(savedMeteorite.getCountry()).isEqualTo(newMeteorite.getCountry());
+        assertThat(savedMeteorite.getMClass()).isEqualTo(newMeteorite.getMClass());
+        assertThat(savedMeteorite.getMGroup()).isEqualTo(newMeteorite.getMGroup());
+        verify(meteoriteRepository, times(1)).save(newMeteorite);
+
+
+    }
 
     @Test
     void testDeleteMeteoriteSuccess(){
+        // Given
+        Meteorite meteorite = new Meteorite();
+        meteorite.setMonnigNumber("M33.1");
+        meteorite.setName("Nick's Meteor");
+        meteorite.setCountry("");
+        meteorite.setMClass("M33.1");
+        meteorite.setMGroup("M33.1");
+        meteorite.setMonnigNumber("M33.1");
+
+        given(meteoriteRepository.findById("M33.1")).willReturn(Optional.of(meteorite));
+        doNothing().when(meteoriteRepository).deleteById("M33.1");
+
+        //When
+        meteoriteService.delete("M33.1");
+
+        //Then
+        verify(meteoriteRepository, times(1)).deleteById("M33.1");
+
 
     }
 
     @Test
     void testDeleteMeteoriteFail(){
+        //Given
+        given(meteoriteRepository.findById("M33.1")).willReturn(Optional.empty());
 
+        //When
+        assertThrows(MeteoriteNotFoundException.class, () -> {
+            meteoriteService.delete("M33.1");
+        });
+
+        //Then
+        verify(meteoriteRepository, times(1)).findById("M33.1");
     }
 
     @Test
