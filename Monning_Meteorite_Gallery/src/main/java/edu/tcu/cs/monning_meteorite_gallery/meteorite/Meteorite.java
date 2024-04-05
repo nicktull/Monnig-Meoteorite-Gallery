@@ -1,7 +1,9 @@
 package edu.tcu.cs.monning_meteorite_gallery.meteorite;
 
+import edu.tcu.cs.monning_meteorite_gallery.loans.Loans;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 import java.io.Serializable;
 
@@ -22,6 +24,11 @@ public class Meteorite implements Serializable {
     private String yearFound;
 
     private String weight;
+
+    @ManyToOne
+    private Loans loanee;
+
+    public Meteorite() {}
 
     public String getMonnigNumber() {
         return monnigNumber;
@@ -77,5 +84,13 @@ public class Meteorite implements Serializable {
 
     public void setWeight(String weight) {
         this.weight = weight;
+    }
+
+    public Loans getLoanee() {
+        return loanee;
+    }
+
+    public void setLoanee(Loans loanee) {
+        this.loanee = loanee;
     }
 }

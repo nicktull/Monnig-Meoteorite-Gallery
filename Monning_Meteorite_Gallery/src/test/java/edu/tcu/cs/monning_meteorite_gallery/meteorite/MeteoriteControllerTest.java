@@ -122,7 +122,9 @@ class MeteoriteControllerTest {
                 "Nicks",
                 "Web Tech",
                 "2024",
-                "500");
+                "500",
+                null
+                );
 
         String json = this.objectMapper.writeValueAsString(meteoriteDto);
 
@@ -189,7 +191,8 @@ class MeteoriteControllerTest {
                 "Ordinary Chrondite",
                 "H",
                 "1951",
-                "325.1");
+                "325.1",
+                null);
         String json = this.objectMapper.writeValueAsString(meteoriteDto);
 
         Meteorite updatedMeteorite = new Meteorite();
@@ -227,7 +230,8 @@ class MeteoriteControllerTest {
                 "Ordinary Chrondite",
                 "H",
                 "1951",
-                "325.1");
+                "325.1",
+                null);
         String json = this.objectMapper.writeValueAsString(meteoriteDto);
 
         given(this.meteoriteService.update(eq("M398.1"), Mockito.any(Meteorite.class))).willThrow(new MeteoriteNotFoundException("M398.1"));

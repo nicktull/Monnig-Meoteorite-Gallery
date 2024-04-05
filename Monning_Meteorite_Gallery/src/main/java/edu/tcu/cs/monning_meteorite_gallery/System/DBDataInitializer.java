@@ -1,5 +1,7 @@
 package edu.tcu.cs.monning_meteorite_gallery.System;
 
+import edu.tcu.cs.monning_meteorite_gallery.loans.Loans;
+import edu.tcu.cs.monning_meteorite_gallery.loans.LoansRespository;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.Meteorite;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.MeteoriteRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -9,9 +11,11 @@ import org.springframework.stereotype.Component;
 public class DBDataInitializer implements CommandLineRunner {
 
     private final MeteoriteRepository meteoriteRepository;
+    private final LoansRespository loansRespository;
 
-    public DBDataInitializer(MeteoriteRepository meteoriteRepository) {
+    public DBDataInitializer(MeteoriteRepository meteoriteRepository, LoansRespository loansRespository) {
         this.meteoriteRepository = meteoriteRepository;
+        this.loansRespository = loansRespository;
     }
 
     @Override
@@ -43,8 +47,21 @@ public class DBDataInitializer implements CommandLineRunner {
         Abernathy.setYearFound("1941");
         Abernathy.setWeight("453.1");
 
-        meteoriteRepository.save(Abott);
+        Loans johnDoe = new Loans();
+        johnDoe.setLoaneeName("John Doe");
+        johnDoe.setLoaneeInstitution("XYZ University");
+        johnDoe.setLoaneeEmail("john.doe@example.com");
+        johnDoe.setLoaneeAddress("123 Main St, Anytown, USA");
+        johnDoe.setLoanStartdate("2024-01-01");
+        johnDoe.setLoanDuedate("2024-12-31");
+        johnDoe.setTrackingNumber("TRACK123456");
+        johnDoe.setLoaneeNotes("Notes about the loan");
+        johnDoe.setExtraFiles("path/to/extra/files");
+        johnDoe.addMeteorite(Abernathy);
+        johnDoe.addMeteorite(Abott);
+
         meteoriteRepository.save(Abee);
-        meteoriteRepository.save(Abernathy);
+
+        loansRespository.save(johnDoe);
     }
 }

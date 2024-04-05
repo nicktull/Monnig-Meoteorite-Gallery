@@ -1,30 +1,40 @@
 package edu.tcu.cs.monning_meteorite_gallery.loans;
 
+import edu.tcu.cs.monning_meteorite_gallery.meteorite.Meteorite;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Loans implements Serializable {
     @Id
     private String loaneeName;
 
-    private String loaneInstitution;
+    private String loaneeInstitution;
 
-    private String Email;
+    private String loaneeEmail;
 
-    private String Address;
+    private String loaneeAddress;
 
     private String loanStartdate;
 
     private String loanDuedate;
 
-    private String loanedMonning;
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "loanee")
+    private List<Meteorite> meteorites = new ArrayList<>();
+
+    public Loans(){
+
+    }
 
     private String trackingNumber;
 
-    private String notes;
+    private String loaneeNotes;
 
     private String extraFiles;
 
@@ -36,28 +46,28 @@ public class Loans implements Serializable {
         this.loaneeName = loaneeName;
     }
 
-    public String getLoaneInstitution() {
-        return loaneInstitution;
+    public String getLoaneeInstitution() {
+        return loaneeInstitution;
     }
 
-    public void setLoaneInstitution(String loaneInstitution) {
-        this.loaneInstitution = loaneInstitution;
+    public void setLoaneeInstitution(String loaneeInstitution) {
+        this.loaneeInstitution = loaneeInstitution;
     }
 
-    public String getEmail() {
-        return Email;
+    public String getLoaneeEmail() {
+        return loaneeEmail;
     }
 
-    public void setEmail(String email) {
-        Email = email;
+    public void setLoaneeEmail(String loaneeEmail) {
+        this.loaneeEmail = loaneeEmail;
     }
 
-    public String getAddress() {
-        return Address;
+    public String getLoaneeAddress() {
+        return loaneeAddress;
     }
 
-    public void setAddress(String address) {
-        Address = address;
+    public void setLoaneeAddress(String loaneeAddress) {
+        this.loaneeAddress = loaneeAddress;
     }
 
     public String getLoanStartdate() {
@@ -76,12 +86,12 @@ public class Loans implements Serializable {
         this.loanDuedate = loanDuedate;
     }
 
-    public String getLoanedMonning() {
-        return loanedMonning;
+    public List<Meteorite> getMeteorites() {
+        return meteorites;
     }
 
-    public void setLoanedMonning(String loanedMonning) {
-        this.loanedMonning = loanedMonning;
+    public void setMeteorites(List<Meteorite> meteorites) {
+        this.meteorites = meteorites;
     }
 
     public String getTrackingNumber() {
@@ -92,12 +102,12 @@ public class Loans implements Serializable {
         this.trackingNumber = trackingNumber;
     }
 
-    public String getNotes() {
-        return notes;
+    public String getLoaneeNotes() {
+        return loaneeNotes;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setLoaneeNotes(String loaneeNotes) {
+        this.loaneeNotes = loaneeNotes;
     }
 
     public String getExtraFiles() {
@@ -106,5 +116,15 @@ public class Loans implements Serializable {
 
     public void setExtraFiles(String extraFiles) {
         this.extraFiles = extraFiles;
+    }
+
+    public void addMeteorite(Meteorite meteorite) {
+        meteorite.setLoanee(this);
+        this.meteorites.add(meteorite);
+    }
+
+
+    public Integer getNumberOfMeteorites() {
+        return this.meteorites.size();
     }
 }
