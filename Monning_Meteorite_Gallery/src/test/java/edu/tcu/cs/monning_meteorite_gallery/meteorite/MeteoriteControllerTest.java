@@ -13,26 +13,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-<<<<<<< Updated upstream
 import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-=======
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
->>>>>>> Stashed changes
-
 import static org.mockito.BDDMockito.given;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-<<<<<<< Updated upstream
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-=======
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
->>>>>>> Stashed changes
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest

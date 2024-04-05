@@ -7,6 +7,7 @@ import edu.tcu.cs.monning_meteorite_gallery.meteorite.converter.MeteoriteDtoToMe
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.converter.MeteoriteToMeteoriteDtoConverter;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.dto.MeteoriteDto;
 import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
