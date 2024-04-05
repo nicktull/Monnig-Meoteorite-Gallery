@@ -1,5 +1,6 @@
 package edu.tcu.cs.monning_meteorite_gallery.meteorite;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.tcu.cs.monning_meteorite_gallery.System.StatusCode;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.dto.MeteoriteDto;
 import org.assertj.core.api.Condition;
@@ -17,9 +18,13 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+
 import static org.mockito.BDDMockito.given;
 import java.util.ArrayList;
 import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -32,6 +37,9 @@ class MeteoriteControllerTest {
 
     @MockBean
     MeteoriteService meteoriteService;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     List<Meteorite> meteorites;
 
@@ -78,26 +86,27 @@ class MeteoriteControllerTest {
     @Test
     void testfindArtifactByIdSuccess() throws Exception {
         // Given
-        System.out.println("Mocking findByID method...");
         given(this.meteoriteService.findByID("M398.1")).willReturn(this.meteorites.get(0));
-        System.out.println("Mocking completed.");
 
-        System.out.println("Performing request...");
         // When and Then
         this.mockMvc.perform(get("/api/v1/meteorites/M398.1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(true))
                 .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
                 .andExpect(jsonPath("$.message").value("Found"))
                 .andExpect(jsonPath("$.data.MonnigNumber").value("M398.1"));
-        //http://localhost:8080//api/v1/meteorites/M398.1
-        System.out.println("Request completed.");
     }
 
     @Test
-    void testfindMeteoriteByIdFail() throws Exception{
+    void testfindMeteoriteByIdNotFound() throws Exception{
         // Given
+        given(this.meteoriteService.findByID("M398.1")).willThrow(new MeteoriteNotFoundException("M398.1"));
 
         // When and Then
+        this.mockMvc.perform(get("/api/v1/meteorites/M398.1").accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.flag").value(false))
+                .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
+                .andExpect(jsonPath("$.message").value("Could not find meteorite with monnig number M398.1"))
+                .andExpect(jsonPath("$.data").isEmpty());
     }
 
 
@@ -111,7 +120,9 @@ class MeteoriteControllerTest {
                 "Nicks",
                 "Web Tech",
                 "2024",
-                "500");
+                "500",
+                null
+                );
 
         String json = this.objectMapper.writeValueAsString(meteoriteDto);
 
@@ -168,34 +179,67 @@ class MeteoriteControllerTest {
 
     }
 
-//    @Test
-//    void testUpdateArtifactSuccess(){
-//        // Given
-//        !!!! Edit to M398.1 properties !!!!
-//        Meteorite meteoriteDto = new MeteoriteDto("M398.1",
-//                "Space Rock",
-//                "USA",
-//                "Ordinary Chrondite",
-//                "L",
-//                "1977",
-//                "7.77");
-//        String json = this.objectMapper.writeValueAsString(meteoriteDto);
-//
-//        Meteorite updatedMeteorite = new Meteorite();
-//        updatedMeteorite.Set("1250808601744904192");
-//
-//        given(this.meteoriteService.update(eq("1250808601744904192"), Mockito.any(Meteorite.class))).willReturn(updatedMeteorite);
-//
-//        //When and Then
-//        !!!! Add rest of properties of meteorite !!!!
-//        this.mockMvc.perform(put("/api/v1/meteorite/M398.1").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.flag").value(true))
-//                .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
-//                .andExpect(jsonPath("$.message").value("Update Success"))
-//                .andExpect(jsonPath("$.data.id").value("1250808601744904192"))
-//                .andExpect(jsonPath("$.data.name").value(updatedMeteorite.getName()))
-//                .andExpect(jsonPath("$.data.description").value(updatedMeteorite.getYearFound()))
-//                .andExpect(jsonPath("$.data.imageUrl").value(updatedMeteorite.getMGroup()));
-//    }
+    @Test
+    void testUpdateMeteoriteSuccess() throws Exception{
+        // Given
+        MeteoriteDto meteoriteDto = new MeteoriteDto(
+                "M398.1",
+                "Abott",
+                "USA",
+                "Ordinary Chrondite",
+                "H",
+                "1951",
+                "325.1",
+                null);
+        String json = this.objectMapper.writeValueAsString(meteoriteDto);
+
+        Meteorite updatedMeteorite = new Meteorite();
+        updatedMeteorite.setMonnigNumber("M398.1");
+        updatedMeteorite.setName("Abott");
+        updatedMeteorite.setCountry("Usa");
+        updatedMeteorite.setMClass("Ordinary Chrondite");
+        updatedMeteorite.setMGroup("H");
+        updatedMeteorite.setYearFound("1951");
+        updatedMeteorite.setWeight("325.1");
+
+        given(this.meteoriteService.update(eq("M398.1"), Mockito.any(Meteorite.class))).willReturn(updatedMeteorite);
+
+        //When and Then
+        this.mockMvc.perform(put("/api/v1/meteorites/M398.1").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.flag").value(true))
+                .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
+                .andExpect(jsonPath("$.message").value("Update Success"))
+                .andExpect(jsonPath("$.data.MonnigNumber").value("M398.1"))
+                .andExpect(jsonPath("$.data.Name").value(updatedMeteorite.getName()))
+                .andExpect(jsonPath("$.data.Country").value(updatedMeteorite.getCountry()))
+                .andExpect(jsonPath("$.data.MClass").value(updatedMeteorite.getMClass()))
+                .andExpect(jsonPath("$.data.MGroup").value(updatedMeteorite.getMGroup()))
+                .andExpect(jsonPath("$.data.yearFound").value(updatedMeteorite.getYearFound()))
+                .andExpect(jsonPath("$.data.weight").value(updatedMeteorite.getWeight()));
+    }
+
+    @Test
+    void testUpdateMeteoriteErrorWithNonExistentId() throws Exception {
+        // Given
+        MeteoriteDto meteoriteDto = new MeteoriteDto(
+                "M398.1",
+                "Abott",
+                "USA",
+                "Ordinary Chrondite",
+                "H",
+                "1951",
+                "325.1",
+                null);
+        String json = this.objectMapper.writeValueAsString(meteoriteDto);
+
+        given(this.meteoriteService.update(eq("M398.1"), Mockito.any(Meteorite.class))).willThrow(new MeteoriteNotFoundException("M398.1"));
+
+        //When and Then
+        this.mockMvc.perform(put("/api/v1/meteorites/M398.1").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.flag").value(false))
+                .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
+                .andExpect(jsonPath("$.message").value("Could not find meteorite with monnig number M398.1"))
+                .andExpect(jsonPath("$.data").isEmpty());
+    }
 
 }

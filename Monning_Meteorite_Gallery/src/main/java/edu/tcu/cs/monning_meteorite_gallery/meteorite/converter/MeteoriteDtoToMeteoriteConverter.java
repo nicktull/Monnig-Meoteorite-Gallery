@@ -15,8 +15,8 @@ public class MeteoriteDtoToMeteoriteConverter implements Converter<MeteoriteDto,
             meteorite.setName(source.Name());
             meteorite.setCountry(source.Country());
             meteorite.setMClass(source.MClass());
-            meteorite.setMGroup(source.Group());
-            meteorite.setYearFound(source.year());
+            meteorite.setMGroup(source.MGroup());
+            meteorite.setYearFound(source.yearFound());
             meteorite.setWeight(source.weight());
             return meteorite;
     }
