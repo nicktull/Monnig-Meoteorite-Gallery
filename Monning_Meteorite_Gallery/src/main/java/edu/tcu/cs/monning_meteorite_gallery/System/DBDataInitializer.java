@@ -1,7 +1,7 @@
 package edu.tcu.cs.monning_meteorite_gallery.System;
 
 import edu.tcu.cs.monning_meteorite_gallery.loans.Loans;
-import edu.tcu.cs.monning_meteorite_gallery.loans.LoansRespository;
+import edu.tcu.cs.monning_meteorite_gallery.loans.LoansRepository;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.Meteorite;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.MeteoriteRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -11,11 +11,11 @@ import org.springframework.stereotype.Component;
 public class DBDataInitializer implements CommandLineRunner {
 
     private final MeteoriteRepository meteoriteRepository;
-    private final LoansRespository loansRespository;
+    private final LoansRepository loansRepository;
 
-    public DBDataInitializer(MeteoriteRepository meteoriteRepository, LoansRespository loansRespository) {
+    public DBDataInitializer(MeteoriteRepository meteoriteRepository, LoansRepository loansRepository) {
         this.meteoriteRepository = meteoriteRepository;
-        this.loansRespository = loansRespository;
+        this.loansRepository = loansRepository;
     }
 
     @Override
@@ -48,6 +48,7 @@ public class DBDataInitializer implements CommandLineRunner {
         Abernathy.setWeight("453.1");
 
         Loans johnDoe = new Loans();
+        johnDoe.setLoaneeId("1");
         johnDoe.setLoaneeName("John Doe");
         johnDoe.setLoaneeInstitution("XYZ University");
         johnDoe.setLoaneeEmail("john.doe@example.com");
@@ -62,6 +63,7 @@ public class DBDataInitializer implements CommandLineRunner {
 
         meteoriteRepository.save(Abee);
 
-        loansRespository.save(johnDoe);
+        loansRepository.save(johnDoe);
+
     }
 }

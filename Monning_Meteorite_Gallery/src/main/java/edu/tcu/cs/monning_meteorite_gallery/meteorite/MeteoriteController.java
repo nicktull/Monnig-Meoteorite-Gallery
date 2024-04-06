@@ -6,11 +6,7 @@ import edu.tcu.cs.monning_meteorite_gallery.meteorite.converter.MeteoriteDtoToMe
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.converter.MeteoriteToMeteoriteDtoConverter;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.dto.MeteoriteDto;
 import jakarta.validation.Valid;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/meteorites")
@@ -37,6 +33,7 @@ public class MeteoriteController {
     public Result addMeteorite(@Valid @RequestBody MeteoriteDto meteoriteDto){
         // Convert MeteoriteDto to meteorite
         Meteorite newMeteorite = this.meteoriteDtoToMeteoriteConverter.convert(meteoriteDto);
+        assert newMeteorite != null; //Make sure that newMeteorite cannot be null
         Meteorite savedMeteorite = this.meteoriteService.save(newMeteorite);
         MeteoriteDto savedMeteoriteDto = this.meteoriteToMeteoriteDtoConverter.convert(savedMeteorite);
         return new Result(true, StatusCode.SUCCESS, "Add Success", savedMeteoriteDto);

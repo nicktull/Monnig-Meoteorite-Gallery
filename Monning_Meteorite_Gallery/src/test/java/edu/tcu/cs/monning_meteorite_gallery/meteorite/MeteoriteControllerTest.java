@@ -194,7 +194,7 @@ class MeteoriteControllerTest {
         String json = this.objectMapper.writeValueAsString(meteoriteDto);
 
         Meteorite updatedMeteorite = new Meteorite();
-        updatedMeteorite.setMonnigNumber("M398.1");
+//        updatedMeteorite.setMonnigNumber("M398.1");
         updatedMeteorite.setName("Abott");
         updatedMeteorite.setCountry("Usa");
         updatedMeteorite.setMClass("Ordinary Chrondite");

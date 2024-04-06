@@ -12,6 +12,7 @@ public class LoansToLoansDtoConverter implements Converter<Loans, LoansDto> {
     public LoansDto convert(Loans source) {
         LoansDto loansDto;
         loansDto = new LoansDto(
+                source.getLoaneeId(),
                 source.getLoaneeName(),
                 source.getLoaneeInstitution(),
                 source.getLoaneeEmail(),

@@ -1,6 +1,6 @@
 package edu.tcu.cs.monning_meteorite_gallery;
 
-import edu.tcu.cs.monning_meteorite_gallery.meteorite.IdWorker.IdWorker;
+import edu.tcu.cs.monning_meteorite_gallery.meteorite.utils.IdWorker;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;

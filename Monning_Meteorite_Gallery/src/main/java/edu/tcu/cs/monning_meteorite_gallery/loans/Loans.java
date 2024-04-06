@@ -13,6 +13,8 @@ import java.util.List;
 @Entity
 public class Loans implements Serializable {
     @Id
+    private String loaneeId;
+
     private String loaneeName;
 
     private String loaneeInstitution;
@@ -37,6 +39,17 @@ public class Loans implements Serializable {
     private String loaneeNotes;
 
     private String extraFiles;
+
+    //Getters and Setters
+
+
+    public String getLoaneeId() {
+        return loaneeId;
+    }
+
+    public void setLoaneeId(String loaneeId) {
+        this.loaneeId = loaneeId;
+    }
 
     public String getLoaneeName() {
         return loaneeName;

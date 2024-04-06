@@ -1,6 +1,6 @@
 package edu.tcu.cs.monning_meteorite_gallery.meteorite;
 
-import edu.tcu.cs.monning_meteorite_gallery.meteorite.IdWorker.IdWorker;
+import edu.tcu.cs.monning_meteorite_gallery.meteorite.utils.IdWorker;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -9,8 +9,9 @@ import org.springframework.stereotype.Service;
 public class MeteoriteService {
     private final MeteoriteRepository meteoriteRepository;
 
-    private final IdWorker idWorker;;
+    private final IdWorker idWorker;
 
+    //Idworker generates an id
     public MeteoriteService(MeteoriteRepository meteoriteRepository, IdWorker idWorker) {  // Need to come back and find the beans
         this.meteoriteRepository = meteoriteRepository;
         this.idWorker = idWorker;
@@ -41,10 +42,10 @@ public class MeteoriteService {
                     oldMeteorite.setMClass(update.getMClass());
                     oldMeteorite.setMGroup(update.getMGroup());
                     oldMeteorite.setWeight(update.getWeight());
+                    oldMeteorite.setLoanee(update.getLoanee()); //may need to adjust as each meteorite can only be loaned to one person
                     return this.meteoriteRepository.save(oldMeteorite);
                 })
                 .orElseThrow(() -> new MeteoriteNotFoundException(meteoriteId));
-
     }
 }
 
