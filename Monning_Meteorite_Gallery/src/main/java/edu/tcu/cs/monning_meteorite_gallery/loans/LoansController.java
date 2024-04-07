@@ -8,6 +8,9 @@ import edu.tcu.cs.monning_meteorite_gallery.loans.dto.LoansDto;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api/v1/loans")
 public class LoansController {
@@ -23,10 +26,20 @@ public class LoansController {
     }
 
     @GetMapping("/{loansId}")
-    public Result findLoansById(@PathVariable int loansId) {
-        Loans foundLoans = this.loansService.findById(String.valueOf(loansId));
+    public Result findLoansById(@PathVariable Integer loansId) {
+        Loans foundLoans = this.loansService.findById(loansId);
         LoansDto loansDto = this.loansToLoansDtoConverter.convert(foundLoans);
         return new Result(true, StatusCode.SUCCESS, "Found", loansDto);
+    }
+    @GetMapping
+    public Result findAllLoans() {
+        List<Loans> foundLoans = this.loansService.findAll();
+
+        // Convert foundLoans to a list of loanDtos
+        List<LoansDto> loanDtos = foundLoans.stream()
+                .map(this.loansToLoansDtoConverter::convert)
+                .toList();
+        return new Result(true, StatusCode.SUCCESS, "Found All Loans",loanDtos);
     }
 
     @PostMapping
@@ -39,16 +52,18 @@ public class LoansController {
     }
 
     @PutMapping("/{loansId}")
-    public Result updateLoans(@PathVariable int loansId, @Valid @RequestBody LoansDto loansDto) {
+    public Result updateLoans(@PathVariable Integer loansId, @Valid @RequestBody LoansDto loansDto) {
         Loans newLoan = this.loansDtoToLoansConverter.convert(loansDto);
-        Loans updatedLoan = this.loansService.update(String.valueOf(loansId), newLoan);
+        Loans updatedLoan = this.loansService.update(loansId, newLoan);
         LoansDto updatedLoansDto = this.loansToLoansDtoConverter.convert(updatedLoan);
         return new Result(true, StatusCode.SUCCESS, "Updated", updatedLoansDto);
     }
 
+    //Replace Delete with archive? or add another?
+    //Perhaps delete from list and add as archive somehow?
     @DeleteMapping("/{loansId}")
-    public Result deleteLoans(@PathVariable int loansId) {
-        this.loansService.delete(String.valueOf(loansId));
-        return new Result(true, StatusCode.SUCCESS, "Deleted", loansId);
+    public Result deleteLoans(@PathVariable Integer loansId) {
+        this.loansService.delete(loansId);
+        return new Result(true, StatusCode.SUCCESS, "Deleted");
     }
 }

@@ -4,8 +4,7 @@ import jakarta.validation.constraints.NotEmpty;
 
 public record LoansDto(
 
-    @NotEmpty(message = "Loanee Id is Required")
-    String loanId,
+    Integer loanId,
 
     @NotEmpty(message = "Loanee Name is Required")
     String loaneeName,

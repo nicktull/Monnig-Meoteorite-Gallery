@@ -2,6 +2,7 @@ package edu.tcu.cs.monning_meteorite_gallery.System;
 
 import edu.tcu.cs.monning_meteorite_gallery.loans.Loans;
 import edu.tcu.cs.monning_meteorite_gallery.loans.LoansRepository;
+import edu.tcu.cs.monning_meteorite_gallery.loans.dto.LoansDto;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.Meteorite;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.MeteoriteRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -47,23 +48,46 @@ public class DBDataInitializer implements CommandLineRunner {
         Abernathy.setYearFound("1941");
         Abernathy.setWeight("453.1");
 
-        Loans johnDoe = new Loans();
-        johnDoe.setLoaneeId("1");
-        johnDoe.setLoaneeName("John Doe");
-        johnDoe.setLoaneeInstitution("XYZ University");
-        johnDoe.setLoaneeEmail("john.doe@example.com");
-        johnDoe.setLoaneeAddress("123 Main St, Anytown, USA");
-        johnDoe.setLoanStartdate("2024-01-01");
-        johnDoe.setLoanDuedate("2024-12-31");
-        johnDoe.setTrackingNumber("TRACK123456");
-        johnDoe.setLoaneeNotes("Notes about the loan");
-        johnDoe.setExtraFiles("path/to/extra/files");
-        johnDoe.addMeteorite(Abernathy);
-        johnDoe.addMeteorite(Abott);
+        Meteorite abuMoharek = new Meteorite();
+        abuMoharek.setName("AbuMoharek");
+        abuMoharek.setMonnigNumber("M787.1");
+        abuMoharek.setCountry("Egypt");
+        abuMoharek.setMClass("Ordinary Chondrite");
+        abuMoharek.setMGroup("H");
+        abuMoharek.setYearFound("1997");
+        abuMoharek.setWeight("56.4");
 
-        meteoriteRepository.save(Abee);
+        Loans Majima = new Loans();
+//        Majima.setLoaneeId(1); id isnt needed due to @GeneratedValue in Loans
+        Majima.setLoaneeName("Goro Majima");
+        Majima.setLoaneeInstitution("Yakuza Foundation");
+        Majima.setLoaneeEmail("majima.goro@example.com");
+        Majima.setLoaneeAddress("1-2-3 Sotenbori, Osaka");
+        Majima.setLoanStartdate("2024-05-01");
+        Majima.setLoanDuedate("2024-12-01");
+        Majima.setTrackingNumber("TN987654321");
+        Majima.setLoaneeNotes("KIRYU-CHAN!!!!");
+        Majima.setExtraFiles("agreement.pdf, item_list.xlsx");
+        Majima.addMeteorite(Abernathy);
+        Majima.addMeteorite(Abott);
 
-        loansRepository.save(johnDoe);
+        Loans kiryu = new Loans();
+//        kiryu.setLoaneeId(2);
+        kiryu.setLoaneeName("Kazuma Kiryu");
+        kiryu.setLoaneeInstitution("Yakuza Foundation");
+        kiryu.setLoaneeEmail("kazuma.kiryu@example.com");
+        kiryu.setLoaneeAddress("1-2-3 Kamurocho, Tokyo");
+        kiryu.setLoanStartdate("2024-04-01");
+        kiryu.setLoanDuedate("2024-10-01");
+        kiryu.setTrackingNumber("TN123456789");
+        kiryu.setLoaneeNotes("Life is like a trampoline. The lower you fall, the higher you go.");
+        kiryu.setExtraFiles("Kakattekoi.pdf, item_list.xlsx");
+        kiryu.addMeteorite(Abee);
+
+        meteoriteRepository.save(abuMoharek);
+
+        loansRepository.save(Majima);
+        loansRepository.save(kiryu);
 
     }
 }

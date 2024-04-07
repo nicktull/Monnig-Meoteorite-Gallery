@@ -194,7 +194,7 @@ class MeteoriteControllerTest {
         String json = this.objectMapper.writeValueAsString(meteoriteDto);
 
         Meteorite updatedMeteorite = new Meteorite();
-//        updatedMeteorite.setMonnigNumber("M398.1");
+        updatedMeteorite.setMonnigNumber("M398.1");
         updatedMeteorite.setName("Abott");
         updatedMeteorite.setCountry("Usa");
         updatedMeteorite.setMClass("Ordinary Chrondite");
@@ -205,7 +205,7 @@ class MeteoriteControllerTest {
         given(this.meteoriteService.update(eq("M398.1"), Mockito.any(Meteorite.class))).willReturn(updatedMeteorite);
 
         //When and Then
-        this.mockMvc.perform(put("/api/v1/meteorites/M398.1").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(put("/api/v1/meteorites/M398.1").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(jsonPath("$.flag").value(true))
                 .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
                 .andExpect(jsonPath("$.message").value("Update Success"))

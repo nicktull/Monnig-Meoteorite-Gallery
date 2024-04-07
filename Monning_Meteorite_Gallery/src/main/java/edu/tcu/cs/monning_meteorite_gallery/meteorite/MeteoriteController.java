@@ -48,7 +48,7 @@ public class MeteoriteController {
     }
 
     @DeleteMapping("/{meteoriteId}")
-    public Result deleteArtifact(@PathVariable String meteoriteId){
+    public Result deleteMeteorite(@PathVariable String meteoriteId){
         this.meteoriteService.delete(meteoriteId);
         return new Result(true, StatusCode.SUCCESS, "Delete Success");
     }

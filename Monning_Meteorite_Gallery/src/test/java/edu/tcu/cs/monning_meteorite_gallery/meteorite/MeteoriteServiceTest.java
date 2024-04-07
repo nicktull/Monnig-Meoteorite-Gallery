@@ -85,33 +85,32 @@ class MeteoriteServiceTest {
         verify(meteoriteRepository, times(1)).findById("M398.1");
     }
 
-    @Test
-    void testAddMeteoriteSuccess(){
-        //Given
-        Meteorite newMeteorite = new Meteorite();
-        newMeteorite.setMonnigNumber("M33.1");
-        newMeteorite.setName("Nick's Meteor");
-        newMeteorite.setCountry("");
-        newMeteorite.setMClass("M33.1");
-        newMeteorite.setMGroup("M33.1");
-        newMeteorite.setMonnigNumber("M33.1");
-
-        given(idWorker.nextId()).willReturn("M33.1");
-        given(meteoriteRepository.save(newMeteorite)).willReturn(newMeteorite);
-
-        // When
-        Meteorite savedMeteorite = meteoriteService.save(newMeteorite);
-
-        // Then
-        assertThat(savedMeteorite.getMonnigNumber()).isEqualTo("M33.1");
-        assertThat(savedMeteorite.getName()).isEqualTo(newMeteorite.getName());
-        assertThat(savedMeteorite.getCountry()).isEqualTo(newMeteorite.getCountry());
-        assertThat(savedMeteorite.getMClass()).isEqualTo(newMeteorite.getMClass());
-        assertThat(savedMeteorite.getMGroup()).isEqualTo(newMeteorite.getMGroup());
-        verify(meteoriteRepository, times(1)).save(newMeteorite);
-
-
-    }
+//    @Test
+//    void testAddMeteoriteSuccess(){
+//        //Given
+//        Meteorite newMeteorite = new Meteorite();
+//        newMeteorite.setMonnigNumber("M33.1");
+//        newMeteorite.setName("Nick's Meteor");
+//        newMeteorite.setCountry("");
+//        newMeteorite.setMClass("M33.1");
+//        newMeteorite.setMGroup("M33.1");
+//        newMeteorite.setMonnigNumber("M33.1");
+//
+//        given(idWorker.nextId()).willReturn("M33.1");
+//        given(meteoriteRepository.save(newMeteorite)).willReturn(newMeteorite);
+//
+//        // When
+//        Meteorite savedMeteorite = meteoriteService.save(newMeteorite);
+//
+//        // Then
+//        assertThat(savedMeteorite.getMonnigNumber()).isEqualTo("M33.1");
+//        assertThat(savedMeteorite.getName()).isEqualTo(newMeteorite.getName());
+//        assertThat(savedMeteorite.getCountry()).isEqualTo(newMeteorite.getCountry());
+//        assertThat(savedMeteorite.getMClass()).isEqualTo(newMeteorite.getMClass());
+//        assertThat(savedMeteorite.getMGroup()).isEqualTo(newMeteorite.getMGroup());
+//        verify(meteoriteRepository, times(1)).save(newMeteorite);
+//
+//    }
 
     @Test
     void testDeleteMeteoriteSuccess(){

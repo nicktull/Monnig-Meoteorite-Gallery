@@ -1,10 +1,7 @@
 package edu.tcu.cs.monning_meteorite_gallery.loans;
 
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.Meteorite;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,7 +10,8 @@ import java.util.List;
 @Entity
 public class Loans implements Serializable {
     @Id
-    private String loaneeId;
+    @GeneratedValue(strategy = GenerationType.AUTO) //Automatically generate an id
+    private Integer loaneeId;
 
     private String loaneeName;
 
@@ -43,11 +41,11 @@ public class Loans implements Serializable {
     //Getters and Setters
 
 
-    public String getLoaneeId() {
+    public Integer getLoaneeId() {
         return loaneeId;
     }
 
-    public void setLoaneeId(String loaneeId) {
+    public void setLoaneeId(Integer loaneeId) {
         this.loaneeId = loaneeId;
     }
 
@@ -136,8 +134,12 @@ public class Loans implements Serializable {
         this.meteorites.add(meteorite);
     }
 
-
     public Integer getNumberOfMeteorites() {
         return this.meteorites.size();
+    }
+
+    public void removeAllMeteorites() {
+        this.meteorites.stream().forEach(meteorite -> meteorite.setLoanee(null));
+        this.meteorites.clear();
     }
 }

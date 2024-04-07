@@ -12,15 +12,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ExceptionHandlerAdvice {
-    @ExceptionHandler(MeteoriteNotFoundException.class)
+    @ExceptionHandler({MeteoriteNotFoundException.class, LoansNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    Result handleMeteoriteNotFoundException(MeteoriteNotFoundException ex){
+    Result handleMeteoriteOrLoansNotFoundException(Exception ex){
         return new Result(false, StatusCode.NOT_FOUND, ex.getMessage());
     }
 
-    @ExceptionHandler(LoansNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    Result handleLoansNotFoundException(LoansNotFoundException ex){
-        return new Result(false, StatusCode.NOT_FOUND, ex.getMessage());
-    }
 }

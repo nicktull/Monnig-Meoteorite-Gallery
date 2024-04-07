@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class LoansNotFoundException extends RuntimeException{
 
-    public LoansNotFoundException(String id){
+    public LoansNotFoundException(Integer id){
         super("Could not find loanee with id " + id);
     }
 
