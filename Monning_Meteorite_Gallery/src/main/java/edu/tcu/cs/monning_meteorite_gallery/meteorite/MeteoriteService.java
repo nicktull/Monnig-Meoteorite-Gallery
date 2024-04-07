@@ -1,8 +1,11 @@
 package edu.tcu.cs.monning_meteorite_gallery.meteorite;
 
+import edu.tcu.cs.monning_meteorite_gallery.loans.Loans;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.utils.IdWorker;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -22,6 +25,8 @@ public class MeteoriteService {
                 //orElseThrow means get object or throw exception
                 .orElseThrow(()-> new MeteoriteNotFoundException(meteoriteId));
     }
+
+    public List<Meteorite> findAll() {return this.meteoriteRepository.findAll();}
 
     public Meteorite save (Meteorite newMeteorite){
         newMeteorite.setMonnigNumber(idWorker.nextId() + "");
