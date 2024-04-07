@@ -1,5 +1,6 @@
 package edu.tcu.cs.monning_meteorite_gallery.loans;
 
+import edu.tcu.cs.monning_meteorite_gallery.System.exception.ObjectNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class LoansService {
 
     public Loans findById (Integer loaneeId){
         return this.loansRepository.findById(loaneeId)
-                .orElseThrow(() -> new LoansNotFoundException(loaneeId));
+                .orElseThrow(() -> new ObjectNotFoundException("loanee", loaneeId));
     }
 
     public List<Loans> findAll(){
@@ -31,7 +32,7 @@ public class LoansService {
 
     public void delete (Integer loaneeId) {
         Loans loanToBeDeleted = this.loansRepository.findById(loaneeId)
-                .orElseThrow(() -> new LoansNotFoundException(loaneeId));
+                .orElseThrow(() -> new ObjectNotFoundException("loanee", loaneeId));
 
         loanToBeDeleted.removeAllMeteorites();
         this.loansRepository.deleteById(loaneeId);
@@ -51,7 +52,7 @@ public class LoansService {
                     oldLoanee.setExtraFiles(newLoanee.getExtraFiles());
                     return this.loansRepository.save(oldLoanee);
                 })
-                .orElseThrow(() -> new LoansNotFoundException(loaneeId));
+                .orElseThrow(() -> new ObjectNotFoundException("loanee", loaneeId));
     }
 
 }

@@ -2,6 +2,7 @@ package edu.tcu.cs.monning_meteorite_gallery.loans;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.tcu.cs.monning_meteorite_gallery.System.StatusCode;
+import edu.tcu.cs.monning_meteorite_gallery.System.exception.ObjectNotFoundException;
 import edu.tcu.cs.monning_meteorite_gallery.loans.dto.LoansDto;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.Meteorite;
 import org.assertj.core.api.Condition;
@@ -117,7 +118,7 @@ class LoansControllerTest {
     @Test
     void findLoansByIdFailure() throws Exception {
         // Given
-        given(this.loansService.findById(1)).willThrow(new LoansNotFoundException(1));
+        given(this.loansService.findById(1)).willThrow(new ObjectNotFoundException("loanee" ,1));
 
         // When and Then
         this.mockMvc.perform(get("/api/v1/loans/1").accept(MediaType.APPLICATION_JSON))
@@ -219,7 +220,7 @@ class LoansControllerTest {
     @Test
     void testUpdateLoansErrorWithNonExistingLoanId() throws Exception {
         // Given
-        given(this.loansService.update(eq(7), Mockito.any(Loans.class))).willThrow(new LoansNotFoundException(7));
+        given(this.loansService.update(eq(7), Mockito.any(Loans.class))).willThrow(new ObjectNotFoundException("loanee", 7));
 
         LoansDto loansDto = new LoansDto(
                 7,
@@ -261,7 +262,7 @@ class LoansControllerTest {
     @Test
     void testDeleteLoansErrorWithNonExistentLoadId() throws Exception {
         // Given
-        doThrow(new LoansNotFoundException(7)).when(this.loansService).delete(7);
+        doThrow(new ObjectNotFoundException("loanee", 7)).when(this.loansService).delete(7);
 
         // When and Then
         this.mockMvc.perform(delete("/api/v1/loans/7").accept(MediaType.APPLICATION_JSON))

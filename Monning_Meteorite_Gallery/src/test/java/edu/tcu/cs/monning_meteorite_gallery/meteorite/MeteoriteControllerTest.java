@@ -2,6 +2,7 @@ package edu.tcu.cs.monning_meteorite_gallery.meteorite;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.tcu.cs.monning_meteorite_gallery.System.StatusCode;
+import edu.tcu.cs.monning_meteorite_gallery.System.exception.ObjectNotFoundException;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.dto.MeteoriteDto;
 import org.assertj.core.api.Condition;
 import org.junit.jupiter.api.AfterEach;
@@ -99,13 +100,13 @@ class MeteoriteControllerTest {
     @Test
     void testfindMeteoriteByIdNotFound() throws Exception{
         // Given
-        given(this.meteoriteService.findByID("M398.1")).willThrow(new MeteoriteNotFoundException("M398.1"));
+        given(this.meteoriteService.findByID("M398.1")).willThrow(new ObjectNotFoundException("meteorite", "M398.1"));
 
         // When and Then
         this.mockMvc.perform(get("/api/v1/meteorites/M398.1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(false))
                 .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
-                .andExpect(jsonPath("$.message").value("Could not find meteorite with monnig number M398.1"))
+                .andExpect(jsonPath("$.message").value("Could not find meteorite with id M398.1"))
                 .andExpect(jsonPath("$.data").isEmpty());
     }
 
@@ -168,7 +169,7 @@ class MeteoriteControllerTest {
     @Test
     void testDeleteMeteoriteFail() throws Exception {
         // Given
-        doThrow(new MeteoriteNotFoundException("M398.1")).when(this.meteoriteService).delete("M398.1");
+        doThrow(new ObjectNotFoundException("meteorite", "M398.1")).when(this.meteoriteService).delete("M398.1");
 
         // When and Then
         this.mockMvc.perform(delete("/api/v1/meteorites/M398.1").accept(MediaType.APPLICATION_JSON))
@@ -232,13 +233,13 @@ class MeteoriteControllerTest {
                 null);
         String json = this.objectMapper.writeValueAsString(meteoriteDto);
 
-        given(this.meteoriteService.update(eq("M398.1"), Mockito.any(Meteorite.class))).willThrow(new MeteoriteNotFoundException("M398.1"));
+        given(this.meteoriteService.update(eq("M398.1"), Mockito.any(Meteorite.class))).willThrow(new ObjectNotFoundException("meteorite", "M398.1"));
 
         //When and Then
         this.mockMvc.perform(put("/api/v1/meteorites/M398.1").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(false))
                 .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
-                .andExpect(jsonPath("$.message").value("Could not find meteorite with monnig number M398.1"))
+                .andExpect(jsonPath("$.message").value("Could not find meteorite with id M398.1"))
                 .andExpect(jsonPath("$.data").isEmpty());
     }
 

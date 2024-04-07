@@ -1,5 +1,6 @@
 package edu.tcu.cs.monning_meteorite_gallery.meteorite;
 
+import edu.tcu.cs.monning_meteorite_gallery.System.exception.ObjectNotFoundException;
 import edu.tcu.cs.monning_meteorite_gallery.loans.Loans;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.utils.IdWorker;
 import jakarta.transaction.Transactional;
@@ -23,7 +24,7 @@ public class MeteoriteService {
     public Meteorite findByID(String meteoriteId){
         return this.meteoriteRepository.findById(meteoriteId)
                 //orElseThrow means get object or throw exception
-                .orElseThrow(()-> new MeteoriteNotFoundException(meteoriteId));
+                .orElseThrow(()-> new ObjectNotFoundException("meteorite", meteoriteId));
     }
 
     public List<Meteorite> findAll() {return this.meteoriteRepository.findAll();}
@@ -34,7 +35,7 @@ public class MeteoriteService {
     }
 
     public void delete(String meteoriteId){
-        this.meteoriteRepository.findById(meteoriteId).orElseThrow(() -> new MeteoriteNotFoundException(meteoriteId));
+        this.meteoriteRepository.findById(meteoriteId).orElseThrow(() -> new ObjectNotFoundException("meteorite", meteoriteId));
         this.meteoriteRepository.deleteById(meteoriteId);
     }
 
@@ -50,7 +51,7 @@ public class MeteoriteService {
                     oldMeteorite.setLoanee(update.getLoanee()); //may need to adjust as each meteorite can only be loaned to one person
                     return this.meteoriteRepository.save(oldMeteorite);
                 })
-                .orElseThrow(() -> new MeteoriteNotFoundException(meteoriteId));
+                .orElseThrow(() -> new ObjectNotFoundException("meteorite", meteoriteId));
     }
 }
 

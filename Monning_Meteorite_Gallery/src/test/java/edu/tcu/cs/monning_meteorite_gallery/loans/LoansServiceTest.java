@@ -1,5 +1,6 @@
 package edu.tcu.cs.monning_meteorite_gallery.loans;
 
+import edu.tcu.cs.monning_meteorite_gallery.System.exception.ObjectNotFoundException;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.Meteorite;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -144,7 +145,7 @@ class LoansServiceTest {
 
         // Then
         assertThat(thrown)
-                .isInstanceOf(LoansNotFoundException.class)
+                .isInstanceOf(ObjectNotFoundException.class)
                 .hasMessage("Could not find loanee with id 1");
         verify(loansRepository, times(1)).findById(1);
     }
@@ -240,7 +241,7 @@ class LoansServiceTest {
         given(loansRepository.findById(2)).willReturn(Optional.empty());
 
         // When
-        assertThrows(LoansNotFoundException.class, ()-> {
+        assertThrows(ObjectNotFoundException.class, ()-> {
            loansService.update(2, newLoanee);
         });
 
@@ -291,7 +292,7 @@ class LoansServiceTest {
         given(this.loansRepository.findById(1)).willReturn(Optional.empty());
 
         // When
-        assertThrows(LoansNotFoundException.class, () -> {
+        assertThrows(ObjectNotFoundException.class, () -> {
             this.loansService.delete(1);
         });
 

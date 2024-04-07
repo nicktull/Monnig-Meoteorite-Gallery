@@ -1,5 +1,6 @@
 package edu.tcu.cs.monning_meteorite_gallery.meteorite;
 
+import edu.tcu.cs.monning_meteorite_gallery.System.exception.ObjectNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -81,7 +82,7 @@ class MeteoriteServiceTest {
         });
 
         // Then
-        assertThat(thrown).isInstanceOf(MeteoriteNotFoundException.class).hasMessage("Could not find meteorite with monnig number M398.1" );
+        assertThat(thrown).isInstanceOf(ObjectNotFoundException.class).hasMessage("Could not find meteorite with id M398.1" );
         verify(meteoriteRepository, times(1)).findById("M398.1");
     }
 
@@ -141,7 +142,7 @@ class MeteoriteServiceTest {
         given(meteoriteRepository.findById("M33.1")).willReturn(Optional.empty());
 
         //When
-        assertThrows(MeteoriteNotFoundException.class, () -> {
+        assertThrows(ObjectNotFoundException.class, () -> {
             meteoriteService.delete("M33.1");
         });
 
@@ -198,7 +199,7 @@ class MeteoriteServiceTest {
         given(meteoriteRepository.findById("M398.1")).willReturn(Optional.empty());
 
         // When
-        assertThrows(MeteoriteNotFoundException.class, ()->{
+        assertThrows(ObjectNotFoundException.class, ()->{
             meteoriteService.update("M398.1", update);
         });
 
