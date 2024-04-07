@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -46,6 +47,9 @@ class LoansControllerTest {
 
     List<Loans> loanees;
     List<Meteorite> meteorites;
+
+    @Value("${api.endpoint.base-url}")
+    String baseUrl;
 
     @BeforeEach
     void setUp() {
@@ -106,7 +110,7 @@ class LoansControllerTest {
         given(this.loansService.findById(1)).willReturn(this.loanees.getFirst());
 
         // When and Then
-        this.mockMvc.perform(get("/api/v1/loans/1").accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(get(this.baseUrl + "/loans/1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(true))
                 .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
                 .andExpect(jsonPath("$.message").value("Found"))
@@ -121,7 +125,7 @@ class LoansControllerTest {
         given(this.loansService.findById(1)).willThrow(new ObjectNotFoundException("loanee" ,1));
 
         // When and Then
-        this.mockMvc.perform(get("/api/v1/loans/1").accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(get(this.baseUrl + "/loans/1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(false))
                 .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
                 .andExpect(jsonPath("$.message").value("Could not find loanee with id 1"))
@@ -134,7 +138,7 @@ class LoansControllerTest {
         given(this.loansService.findAll()).willReturn(this.loanees);
 
         // When and Then
-        this.mockMvc.perform(get("/api/v1/loans").accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(get(this.baseUrl + "/loans").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(true))
                 .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
                 .andExpect(jsonPath("$.message").value("Found All Loans"))
@@ -172,7 +176,7 @@ class LoansControllerTest {
         given(this.loansService.save(Mockito.any(Loans.class))).willReturn(savedLoanee);
 
         //When and Then
-        this.mockMvc.perform(post("/api/v1/loans").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mockMvc.perform(post(this.baseUrl + "/loans").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(jsonPath("$.flag").value(true))
                 .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
                 .andExpect(jsonPath("$.message").value("Saved"))
@@ -209,7 +213,7 @@ class LoansControllerTest {
         given(this.loansService.update(eq(1), Mockito.any(Loans.class))).willReturn(updatedLoans);
 
         // When and Then
-        this.mockMvc.perform(put("/api/v1/loans/1").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(put(this.baseUrl + "/loans/1").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(true))
                 .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
                 .andExpect(jsonPath("$.message").value("Updated"))
@@ -239,7 +243,7 @@ class LoansControllerTest {
         String json = this.objectMapper.writeValueAsString(loansDto);
 
         // When and Then
-        this.mockMvc.perform(put("/api/v1/loans/7").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(put(this.baseUrl + "/loans/7").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(false))
                 .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
                 .andExpect(jsonPath("$.message").value("Could not find loanee with id 7"))
@@ -252,7 +256,7 @@ class LoansControllerTest {
         doNothing().when(this.loansService).delete(2);
 
         // When and Then
-        this.mockMvc.perform(delete("/api/v1/loans/2").accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(delete(this.baseUrl + "/loans/2").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(true))
                 .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
                 .andExpect(jsonPath("$.message").value("Deleted"))
@@ -265,7 +269,7 @@ class LoansControllerTest {
         doThrow(new ObjectNotFoundException("loanee", 7)).when(this.loansService).delete(7);
 
         // When and Then
-        this.mockMvc.perform(delete("/api/v1/loans/7").accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(delete(this.baseUrl + "/loans/7").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(false))
                 .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
                 .andExpect(jsonPath("$.message").value("Could not find loanee with id 7"))

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/meteorites")
+@RequestMapping("${api.endpoint.base-url}/meteorites")
 public class MeteoriteController {
 
     private final MeteoriteService meteoriteService;

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/loans")
+@RequestMapping("${api.endpoint.base-url}/loans")
 public class LoansController {
 
     private final LoansService loansService;

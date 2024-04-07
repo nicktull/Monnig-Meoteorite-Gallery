@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -43,6 +44,9 @@ class MeteoriteControllerTest {
     ObjectMapper objectMapper;
 
     List<Meteorite> meteorites;
+
+    @Value("${api.endpoint.base-url}")
+    String baseUrl;
 
     @BeforeEach
     void setUp() {
@@ -90,7 +94,7 @@ class MeteoriteControllerTest {
         given(this.meteoriteService.findByID("M398.1")).willReturn(this.meteorites.get(0));
 
         // When and Then
-        this.mockMvc.perform(get("/api/v1/meteorites/M398.1").accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(get(this.baseUrl + "/meteorites/M398.1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(true))
                 .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
                 .andExpect(jsonPath("$.message").value("Found"))
@@ -103,7 +107,7 @@ class MeteoriteControllerTest {
         given(this.meteoriteService.findByID("M398.1")).willThrow(new ObjectNotFoundException("meteorite", "M398.1"));
 
         // When and Then
-        this.mockMvc.perform(get("/api/v1/meteorites/M398.1").accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(get(this.baseUrl + "/meteorites/M398.1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(false))
                 .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
                 .andExpect(jsonPath("$.message").value("Could not find meteorite with id M398.1"))
@@ -139,7 +143,7 @@ class MeteoriteControllerTest {
         given(this.meteoriteService.save(Mockito.any(Meteorite.class))).willReturn(savedMeteorite);
 
         // When and Then
-        this.mockMvc.perform(post("/api/v1/meteorites/").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(post(this.baseUrl + "/meteorites/").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(true))
                 .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
                 .andExpect(jsonPath("$.message").value("Add Success"))
@@ -159,7 +163,7 @@ class MeteoriteControllerTest {
         doNothing().when(this.meteoriteService).delete("M398.1");
 
         //When and Then
-        this.mockMvc.perform(delete("/api/v1/meteorites/M398.1").accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(delete(this.baseUrl + "/meteorites/M398.1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(true))
                 .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
                 .andExpect(jsonPath("$.message").value("Delete Success"))
@@ -172,7 +176,7 @@ class MeteoriteControllerTest {
         doThrow(new ObjectNotFoundException("meteorite", "M398.1")).when(this.meteoriteService).delete("M398.1");
 
         // When and Then
-        this.mockMvc.perform(delete("/api/v1/meteorites/M398.1").accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(delete(this.baseUrl + "/meteorites/M398.1").accept(MediaType.APPLICATION_JSON))
                   .andExpect(jsonPath("$.flag").value(false))
                   .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
                   .andExpect(jsonPath("$.message").value("Could not find meteorite with Id M398.1 :("))
@@ -206,7 +210,7 @@ class MeteoriteControllerTest {
         given(this.meteoriteService.update(eq("M398.1"), Mockito.any(Meteorite.class))).willReturn(updatedMeteorite);
 
         //When and Then
-        this.mockMvc.perform(put("/api/v1/meteorites/M398.1").contentType(MediaType.APPLICATION_JSON).content(json))
+        this.mockMvc.perform(put(this.baseUrl + "/meteorites/M398.1").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(jsonPath("$.flag").value(true))
                 .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
                 .andExpect(jsonPath("$.message").value("Update Success"))
@@ -236,7 +240,7 @@ class MeteoriteControllerTest {
         given(this.meteoriteService.update(eq("M398.1"), Mockito.any(Meteorite.class))).willThrow(new ObjectNotFoundException("meteorite", "M398.1"));
 
         //When and Then
-        this.mockMvc.perform(put("/api/v1/meteorites/M398.1").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(put(this.baseUrl + "/meteorites/M398.1").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(false))
                 .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
                 .andExpect(jsonPath("$.message").value("Could not find meteorite with id M398.1"))
