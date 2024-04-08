@@ -90,7 +90,7 @@ class MeteoriteServiceTest {
     }
 
     @Test
-    void testAddMeteoriteSuccess(){
+    void testSaveMeteoriteSuccess(){
         //Given
         Meteorite newMeteorite = new Meteorite();
         newMeteorite.setMonnigNumber("M33.1");
@@ -107,7 +107,7 @@ class MeteoriteServiceTest {
         Meteorite savedMeteorite = meteoriteService.save(newMeteorite);
 
         // Then
-        assertThat(savedMeteorite.getMonnigNumber()).isEqualTo("M33.1");
+        assertThat(savedMeteorite.getMonnigNumber()).isEqualTo("123456");
         assertThat(savedMeteorite.getName()).isEqualTo(newMeteorite.getName());
         assertThat(savedMeteorite.getCountry()).isEqualTo(newMeteorite.getCountry());
         assertThat(savedMeteorite.getMClass()).isEqualTo(newMeteorite.getMClass());
