@@ -85,7 +85,7 @@ class MeteoriteServiceTest {
         });
 
         // Then
-        assertThat(thrown).isInstanceOf(ObjectNotFoundException.class).hasMessage("Could not find meteorite with id M398.1" );
+        assertThat(thrown).isInstanceOf(ObjectNotFoundException.class).hasMessage("Could not find meteorite with Id M398.1" );
         verify(meteoriteRepository, times(1)).findById("M398.1");
     }
 

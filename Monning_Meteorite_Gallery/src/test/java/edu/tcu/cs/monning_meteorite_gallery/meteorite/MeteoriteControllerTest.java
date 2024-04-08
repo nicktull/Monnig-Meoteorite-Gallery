@@ -110,7 +110,7 @@ class MeteoriteControllerTest {
         this.mockMvc.perform(get(this.baseUrl + "/meteorites/M398.1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(false))
                 .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
-                .andExpect(jsonPath("$.message").value("Could not find meteorite with id M398.1"))
+                .andExpect(jsonPath("$.message").value("Could not find meteorite with Id M398.1"))
                 .andExpect(jsonPath("$.data").isEmpty());
     }
 
@@ -179,7 +179,7 @@ class MeteoriteControllerTest {
         this.mockMvc.perform(delete(this.baseUrl + "/meteorites/M398.1").accept(MediaType.APPLICATION_JSON))
                   .andExpect(jsonPath("$.flag").value(false))
                   .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
-                  .andExpect(jsonPath("$.message").value("Could not find meteorite with Id M398.1 :("))
+                  .andExpect(jsonPath("$.message").value("Could not find meteorite with Id M398.1"))
                   .andExpect(jsonPath("$.data").isEmpty());
 
     }
@@ -243,7 +243,7 @@ class MeteoriteControllerTest {
         this.mockMvc.perform(put(this.baseUrl + "/meteorites/M398.1").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(false))
                 .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
-                .andExpect(jsonPath("$.message").value("Could not find meteorite with id M398.1"))
+                .andExpect(jsonPath("$.message").value("Could not find meteorite with Id M398.1"))
                 .andExpect(jsonPath("$.data").isEmpty());
     }
 

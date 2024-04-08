@@ -12,11 +12,10 @@ import java.util.List;
 @Transactional
 public class MeteoriteService {
     private final MeteoriteRepository meteoriteRepository;
-
     private final IdWorker idWorker;
 
     //Idworker generates an id
-    public MeteoriteService(MeteoriteRepository meteoriteRepository, IdWorker idWorker) {  // Need to come back and find the beans
+    public MeteoriteService(MeteoriteRepository meteoriteRepository, IdWorker idWorker) {
         this.meteoriteRepository = meteoriteRepository;
         this.idWorker = idWorker;
     }
