@@ -1,6 +1,7 @@
 package edu.tcu.cs.monning_meteorite_gallery.meteorite;
 
 import edu.tcu.cs.monning_meteorite_gallery.System.exception.ObjectNotFoundException;
+import edu.tcu.cs.monning_meteorite_gallery.meteorite.utils.IdWorker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,8 @@ class MeteoriteServiceTest {
 
     @InjectMocks //mRepo will be injected into this
     MeteoriteService meteoriteService;
+    @Mock
+    private IdWorker idWorker;
 
     @BeforeEach
     void setUp() {
@@ -86,32 +89,32 @@ class MeteoriteServiceTest {
         verify(meteoriteRepository, times(1)).findById("M398.1");
     }
 
-//    @Test
-//    void testAddMeteoriteSuccess(){
-//        //Given
-//        Meteorite newMeteorite = new Meteorite();
-//        newMeteorite.setMonnigNumber("M33.1");
-//        newMeteorite.setName("Nick's Meteor");
-//        newMeteorite.setCountry("");
-//        newMeteorite.setMClass("M33.1");
-//        newMeteorite.setMGroup("M33.1");
-//        newMeteorite.setMonnigNumber("M33.1");
-//
-//        given(idWorker.nextId()).willReturn("M33.1");
-//        given(meteoriteRepository.save(newMeteorite)).willReturn(newMeteorite);
-//
-//        // When
-//        Meteorite savedMeteorite = meteoriteService.save(newMeteorite);
-//
-//        // Then
-//        assertThat(savedMeteorite.getMonnigNumber()).isEqualTo("M33.1");
-//        assertThat(savedMeteorite.getName()).isEqualTo(newMeteorite.getName());
-//        assertThat(savedMeteorite.getCountry()).isEqualTo(newMeteorite.getCountry());
-//        assertThat(savedMeteorite.getMClass()).isEqualTo(newMeteorite.getMClass());
-//        assertThat(savedMeteorite.getMGroup()).isEqualTo(newMeteorite.getMGroup());
-//        verify(meteoriteRepository, times(1)).save(newMeteorite);
-//
-//    }
+    @Test
+    void testAddMeteoriteSuccess(){
+        //Given
+        Meteorite newMeteorite = new Meteorite();
+        newMeteorite.setMonnigNumber("M33.1");
+        newMeteorite.setName("Nick's Meteor");
+        newMeteorite.setCountry("");
+        newMeteorite.setMClass("M33.1");
+        newMeteorite.setMGroup("M33.1");
+        newMeteorite.setMonnigNumber("M33.1");
+
+        given(idWorker.nextId()).willReturn(123456L);
+        given(meteoriteRepository.save(newMeteorite)).willReturn(newMeteorite);
+
+        // When
+        Meteorite savedMeteorite = meteoriteService.save(newMeteorite);
+
+        // Then
+        assertThat(savedMeteorite.getMonnigNumber()).isEqualTo("M33.1");
+        assertThat(savedMeteorite.getName()).isEqualTo(newMeteorite.getName());
+        assertThat(savedMeteorite.getCountry()).isEqualTo(newMeteorite.getCountry());
+        assertThat(savedMeteorite.getMClass()).isEqualTo(newMeteorite.getMClass());
+        assertThat(savedMeteorite.getMGroup()).isEqualTo(newMeteorite.getMGroup());
+        verify(meteoriteRepository, times(1)).save(newMeteorite);
+
+    }
 
     @Test
     void testDeleteMeteoriteSuccess(){
