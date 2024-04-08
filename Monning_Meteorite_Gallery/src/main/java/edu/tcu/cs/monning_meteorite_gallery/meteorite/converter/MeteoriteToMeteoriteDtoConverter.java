@@ -24,9 +24,7 @@ public class MeteoriteToMeteoriteDtoConverter implements Converter<Meteorite, Me
                                                         source.getMGroup(),
                                                         source.getYearFound(),
                                                         source.getWeight(),
-                                                        source.getLoanee() != null
-                                                                ? this.loansToLoansDtoConverter.convert(source.getLoanee())
-                                                                : null );
+                                                        source.getLoanStatus());
         return meteoriteDto;
     }
 

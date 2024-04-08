@@ -17,7 +17,7 @@ public class LoansDtoToLoansConverter implements Converter<LoansDto, Loans> {
             loan.setLoaneeAddress(source.loaneeAddress());
             loan.setLoanStartdate(source.loanStartdate());
             loan.setLoanDuedate(source.loanDuedate());
-//            loan.setMeteorites(source.numberOfMeteorites()); is this needed?
+            loan.setMeteorites(source.meteorites());
             loan.setTrackingNumber(source.trackingNumber());
             loan.setLoaneeNotes(source.loaneeNotes());
             loan.setExtraFiles(source.extraFiles());

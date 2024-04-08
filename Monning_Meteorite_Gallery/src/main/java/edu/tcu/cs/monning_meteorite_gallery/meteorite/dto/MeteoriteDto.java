@@ -18,7 +18,7 @@ public record MeteoriteDto(
         String yearFound,
         @NotEmpty(message = "Weight is Required")
         String weight,
-        LoansDto loanee // loanee can be empty
+        String loanStatus
 ) {
 }
 

@@ -18,7 +18,7 @@ public class MeteoriteDtoToMeteoriteConverter implements Converter<MeteoriteDto,
             meteorite.setMGroup(source.MGroup());
             meteorite.setYearFound(source.yearFound());
             meteorite.setWeight(source.weight());
-//            meteorite.setLoanee(source.loanee()); is this needed?
+            meteorite.setLoanStatus();
             return meteorite;
     }
 }

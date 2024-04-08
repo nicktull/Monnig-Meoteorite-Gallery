@@ -1,5 +1,6 @@
 package edu.tcu.cs.monning_meteorite_gallery.meteorite;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.tcu.cs.monning_meteorite_gallery.loans.Loans;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -25,7 +26,10 @@ public class Meteorite implements Serializable {
 
     private String weight;
 
+    private String loanStatus = "Available";
+
     @ManyToOne
+    @JsonIgnore
     private Loans loanee;
 
     public Meteorite() {}
@@ -84,6 +88,18 @@ public class Meteorite implements Serializable {
 
     public void setWeight(String weight) {
         this.weight = weight;
+    }
+
+    public String getLoanStatus() {
+        return loanStatus;
+    }
+
+    public void setLoanStatus() {
+        if(this.loanee != null){
+            this.loanStatus = "Unavailable";
+        } else{
+            this.loanStatus = "Available";
+        }
     }
 
     public Loans getLoanee() {

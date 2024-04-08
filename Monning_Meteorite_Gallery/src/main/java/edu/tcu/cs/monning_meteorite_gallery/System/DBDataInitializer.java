@@ -84,6 +84,11 @@ public class DBDataInitializer implements CommandLineRunner {
         kiryu.setExtraFiles("Kakattekoi.pdf, item_list.xlsx");
         kiryu.addMeteorite(Abee);
 
+        abuMoharek.setLoanStatus();
+        Abee.setLoanStatus();
+        Abernathy.setLoanStatus();
+        Abott.setLoanStatus();
+
         meteoriteRepository.save(abuMoharek);
 
         loansRepository.save(Majima);

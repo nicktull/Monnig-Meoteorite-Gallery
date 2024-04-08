@@ -139,7 +139,7 @@ public class Loans implements Serializable {
     }
 
     public void removeAllMeteorites() {
-        this.meteorites.stream().forEach(meteorite -> meteorite.setLoanee(null));
+        this.meteorites.forEach(meteorite -> meteorite.setLoanee(null));
         this.meteorites.clear();
     }
 }

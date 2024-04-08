@@ -21,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.eq;
@@ -89,9 +90,6 @@ class LoansControllerTest {
         meteorite2.setMonnigNumber("M002");
         meteorite2.setName("Mars Rock");
 
-        meteorite1.setLoanee(johnDoe);
-        meteorite2.setLoanee(johnDoe);
-
         this.meteorites.add(meteorite1);
         this.meteorites.add(meteorite2);
 
@@ -151,6 +149,13 @@ class LoansControllerTest {
 
     @Test
     void testAddLoanSuccess() throws Exception {
+        Meteorite meteorite1 = new Meteorite();
+        meteorite1.setMonnigNumber("M001");
+        meteorite1.setName("Moon Rock");
+        Meteorite meteorite2 = new Meteorite();
+        meteorite2.setMonnigNumber("M002");
+        meteorite2.setName("Mars Rock");
+
         LoansDto loansDto = new LoansDto(
                 null, //the loanId is generated automatically
                 "Kazuma Kiryu",
@@ -162,7 +167,7 @@ class LoansControllerTest {
                 "TN123456789",
                 "KAKATTE KOI!",
                 "agreement.pdf, item_list.xlsx",
-                5 // Example number of meteorites
+                Arrays.asList(meteorite1, meteorite2)
         );
 
         String json = this.objectMapper.writeValueAsString(loansDto);
@@ -189,6 +194,13 @@ class LoansControllerTest {
 
     @Test
     void testUpdateLoansSuccess() throws Exception {
+        Meteorite meteorite1 = new Meteorite();
+        meteorite1.setMonnigNumber("M001");
+        meteorite1.setName("Moon Rock");
+        Meteorite meteorite2 = new Meteorite();
+        meteorite2.setMonnigNumber("M002");
+        meteorite2.setName("Mars Rock");
+
         LoansDto loansDto = new LoansDto(
                 null, //the loanId is generated automatically
                 "Kazuma Kiryu",
@@ -200,7 +212,7 @@ class LoansControllerTest {
                 "TN123456789",
                 "Life is like a trampoline. The lower you fall, the higher you go.",
                 "agreement.pdf, item_list.xlsx",
-                5
+                Arrays.asList(meteorite1, meteorite2)
         );
 
         Loans updatedLoans = new Loans();
@@ -226,6 +238,13 @@ class LoansControllerTest {
         // Given
         given(this.loansService.update(eq(7), Mockito.any(Loans.class))).willThrow(new ObjectNotFoundException("loanee", 7));
 
+        Meteorite meteorite1 = new Meteorite();
+        meteorite1.setMonnigNumber("M001");
+        meteorite1.setName("Moon Rock");
+        Meteorite meteorite2 = new Meteorite();
+        meteorite2.setMonnigNumber("M002");
+        meteorite2.setName("Mars Rock");
+
         LoansDto loansDto = new LoansDto(
                 7,
                 "Goro Majima",
@@ -237,7 +256,7 @@ class LoansControllerTest {
                 "TN987654321",
                 "KIRYU-CHAN!!!!",
                 "agreement.pdf, item_list.xlsx",
-                5
+                Arrays.asList(meteorite1, meteorite2)
                 );
 
         String json = this.objectMapper.writeValueAsString(loansDto);

@@ -22,7 +22,7 @@ public class LoansToLoansDtoConverter implements Converter<Loans, LoansDto> {
                 source.getTrackingNumber(),
                 source.getLoaneeNotes(),
                 source.getExtraFiles(),
-                source.getNumberOfMeteorites());
+                source.getMeteorites());
         return loansDto;
     }
 }

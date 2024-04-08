@@ -1,6 +1,9 @@
 package edu.tcu.cs.monning_meteorite_gallery.loans.dto;
 
+import edu.tcu.cs.monning_meteorite_gallery.meteorite.Meteorite;
 import jakarta.validation.constraints.NotEmpty;
+
+import java.util.List;
 
 public record LoansDto(
 
@@ -31,6 +34,6 @@ public record LoansDto(
 
     String extraFiles,
 
-    Integer numberOfMeteorites) {
+    List<Meteorite> meteorites) {
 
 }
