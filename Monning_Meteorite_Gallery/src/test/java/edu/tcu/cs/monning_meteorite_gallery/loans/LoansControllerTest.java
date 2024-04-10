@@ -337,5 +337,29 @@ class LoansControllerTest {
                 .andExpect(jsonPath("$.data").isEmpty());
     }
 
+    @Test
+    void testArchiveLoanSuccess() throws Exception {
+        // Given
+        doNothing().when(this.loansService).archive(2);
+
+        // When and Then
+        this.mockMvc.perform(put(this.baseUrl + "/loans/archive/1").accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.flag").value(true))
+                .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
+                .andExpect(jsonPath("$.message").value("Archived Loan"))
+                .andExpect(jsonPath("$.data").isEmpty());
+    }
+
+    @Test
+    void testArchiveLoanWithNonExistentLoaneeId() throws Exception {
+        // Given
+        doThrow(new ObjectNotFoundException("loanee", 1)).when(this.loansService).archive(1);
+        // When and Then
+        this.mockMvc.perform(put(this.baseUrl + "/loans/archive/1").accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.flag").value(false))
+                .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
+                .andExpect(jsonPath("$.message").value("Could not find loanee with Id 1"))
+                .andExpect(jsonPath("$.data").isEmpty());
+    }
     //Implement test cases for findActiveLoans and findArchivedLoans
 }

@@ -87,14 +87,11 @@ public class LoansController {
         return new Result(true, StatusCode.SUCCESS, "Updated", updatedLoansDto);
     }
 
-//    //Perhaps a new dto specifically for updating status is needed
-//    @PutMapping("/archive/{loansId}")
-//    public Result archiveLoan(@PathVariable Integer loansId, @Valid @RequestBody LoansDto loansDto){
-//        Loans newLoan = this.loansDtoToLoansConverter.convert(loansDto);
-//        Loans updatedLoan = this.loansService.archive(loansId, newLoan);
-//        LoansDto updatedLoansDto = this.loansToLoansDtoConverter.convert(updatedLoan);
-//        return new Result(true, StatusCode.SUCCESS, "Updated", updatedLoansDto);
-//    }
+    @PutMapping("/archive/{loansId}")
+    public Result archiveLoan(@PathVariable Integer loansId){
+        this.loansService.archive(loansId);
+        return new Result(true, StatusCode.SUCCESS, "Archived Loan");
+    }
 
     /**
      * Loans a meteorite to a loanee

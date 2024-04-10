@@ -346,6 +346,7 @@ class LoansServiceTest {
 
         // Then
         assertThat(meteorite1.getLoanee()).isEqualTo(loanee1);
+        assertThat(loanee1.getMeteorites()).contains(meteorite1);
     }
 
     @Test
@@ -399,6 +400,45 @@ class LoansServiceTest {
         assertThat(thrown)
                 .isInstanceOf(ObjectNotFoundException.class)
                 .hasMessage("Could not find meteorite with Id M001");
+    }
+
+    @Test
+    void testArchiveSuccess(){
+        // Given
+        Loans loanee = new Loans();
+
+        loanee.setLoaneeId(1);
+        loanee.setLoaneeName("John Doe");
+        loanee.setLoaneeInstitution("National Science Institute");
+        loanee.setLoaneeEmail("johndoe@example.com");
+        loanee.setLoaneeAddress("123 Science Lane, Research City, RC 45678");
+        loanee.setLoanStartdate("2024-01-01");
+        loanee.setLoanDuedate("2024-06-30");
+        loanee.setTrackingNumber("TN123456789");
+        loanee.setLoaneeNotes("Please handle with care, especially the fragile samples.");
+        loanee.setExtraFiles("loan_agreement.pdf, sample_list.xlsx");
+        loanee.setMeteorites(meteorites);
+
+        given(this.loansRepository.findById(1)).willReturn(Optional.of(loanee));
+        // When
+        this.loansService.archive(1);
+
+        // Then
+        assertThat(loanee.getStatus()).isEqualTo("Archived");
+    }
+
+    @Test
+    void testArchiveErrorWithNonExistentLoaneeId(){
+        // Given
+        given(this.loansRepository.findById(1)).willReturn(Optional.empty());
+        // When
+        Throwable thrown = assertThrows(ObjectNotFoundException.class, () -> {
+            this.loansService.archive(1);
+        });
+        // Then
+        assertThat(thrown)
+                .isInstanceOf(ObjectNotFoundException.class)
+                .hasMessage("Could not find loanee with Id 1");
     }
     //Implement test cases for archive
 }

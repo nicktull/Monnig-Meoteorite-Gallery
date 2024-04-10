@@ -60,14 +60,14 @@ public class LoansService {
                 .orElseThrow(() -> new ObjectNotFoundException("loanee", loaneeId));
     }
 
-    public void loanMeteorite(Integer loanId, String meteoriteId) {
+    public void loanMeteorite(Integer loaneeId, String meteoriteId) {
         // Find the meteorite by id from DB
         Meteorite meteoriteToBeLoaned = this.meteoriteRepository.findById(meteoriteId)
                 .orElseThrow(() -> new ObjectNotFoundException("meteorite", meteoriteId));
 
         // Find loanee by id from db
-        Loans loan = this.loansRepository.findById(loanId)
-                .orElseThrow(() -> new ObjectNotFoundException("loanee", loanId));
+        Loans loan = this.loansRepository.findById(loaneeId)
+                .orElseThrow(() -> new ObjectNotFoundException("loanee", loaneeId));
 
         // loan meteorite
         // Check if meteorite is already loaned to someone.
@@ -77,13 +77,12 @@ public class LoansService {
         loan.addMeteorite(meteoriteToBeLoaned);
     }
 
-    public Loans archive(Integer loaneeId, Loans newLoanee) {
-        return this.loansRepository.findById(loaneeId)
-                .map(oldLoanee ->{
-                    oldLoanee.setStatus();
-                    return this.loansRepository.save(oldLoanee);
-                })
+    public void archive(Integer loaneeId) {
+        //Find loanee by id from db
+        Loans loanToBeArchived = this.loansRepository.findById(loaneeId)
                 .orElseThrow(() -> new ObjectNotFoundException("loanee", loaneeId));
+
+        loanToBeArchived.setStatus();
     }
 
 }
