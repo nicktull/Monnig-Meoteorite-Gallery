@@ -42,6 +42,34 @@ public class LoansController {
         return new Result(true, StatusCode.SUCCESS, "Found All Loans",loanDtos);
     }
 
+    @GetMapping("/activeLoans")
+    public Result findActiveLoans(){
+        List<Loans> foundLoans = this.loansService.findAll();
+
+        List<Loans> archivedLoans = foundLoans.stream()
+                .filter(loan -> loan.getStatus().equals("Active"))
+                .toList();
+
+        List<LoansDto> loanDtos = archivedLoans.stream()
+                .map(this.loansToLoansDtoConverter::convert)
+                .toList();
+        return new Result(true, StatusCode.SUCCESS, "Found All Active Loans", loanDtos);
+    }
+
+    @GetMapping("/archivedLoans")
+    public Result findArchivedLoans() {
+        List<Loans> foundLoans = this.loansService.findAll();
+
+        List<Loans> archivedLoans = foundLoans.stream()
+                .filter(loan -> loan.getStatus().equals("Archived"))
+                .toList();
+
+        List<LoansDto> loanDtos = archivedLoans.stream()
+                .map(this.loansToLoansDtoConverter::convert)
+                .toList();
+        return new Result(true, StatusCode.SUCCESS, "Found All Archived Loans", loanDtos);
+    }
+
     @PostMapping
     public Result addLoans(@Valid @RequestBody LoansDto loansDto) {
         Loans newLoans = this.loansDtoToLoansConverter.convert(loansDto);
@@ -59,8 +87,27 @@ public class LoansController {
         return new Result(true, StatusCode.SUCCESS, "Updated", updatedLoansDto);
     }
 
-    //Replace Delete with archive? or add another?
-    //Perhaps delete from list and add as archive somehow?
+//    //Perhaps a new dto specifically for updating status is needed
+//    @PutMapping("/archive/{loansId}")
+//    public Result archiveLoan(@PathVariable Integer loansId, @Valid @RequestBody LoansDto loansDto){
+//        Loans newLoan = this.loansDtoToLoansConverter.convert(loansDto);
+//        Loans updatedLoan = this.loansService.archive(loansId, newLoan);
+//        LoansDto updatedLoansDto = this.loansToLoansDtoConverter.convert(updatedLoan);
+//        return new Result(true, StatusCode.SUCCESS, "Updated", updatedLoansDto);
+//    }
+
+    /**
+     * Loans a meteorite to a loanee
+     * if the meteorite is already being loaned, it will remove the meteorite from
+     * the previous loanee and add it to the specified loanee
+    **/
+    @PutMapping("/{loanId}/meteorites/{meteoriteId}")
+    public Result loanMeteorite(@PathVariable Integer loanId, @PathVariable String meteoriteId){
+        this.loansService.loanMeteorite(loanId, meteoriteId);
+        return new Result(true, StatusCode.SUCCESS, "Loan Meteorite Success");
+    }
+
+    //May not be needed
     @DeleteMapping("/{loansId}")
     public Result deleteLoans(@PathVariable Integer loansId) {
         this.loansService.delete(loansId);

@@ -72,6 +72,7 @@ public class MeteoriteController {
         return new Result(true, StatusCode.SUCCESS, "Add Success", savedMeteoriteDto);
     }
 
+
     @PutMapping("/{meteoriteId}")
     public Result updateMeteorite(@PathVariable String meteoriteId, @Valid @RequestBody MeteoriteDto meteoriteDto){
         Meteorite update = this.meteoriteDtoToMeteoriteConverter.convert(meteoriteDto);

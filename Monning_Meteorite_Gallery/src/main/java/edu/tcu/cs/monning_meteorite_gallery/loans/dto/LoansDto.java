@@ -30,10 +30,12 @@ public record LoansDto(
     @NotEmpty(message = "Tracking Number is Required")
     String trackingNumber,
 
+    String status,
+
     String loaneeNotes,
 
     String extraFiles,
 
-    List<Meteorite> meteorites) {
+    List<Meteorite> meteorites){
 
 }

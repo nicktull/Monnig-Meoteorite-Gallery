@@ -13,15 +13,16 @@ public class LoansDtoToLoansConverter implements Converter<LoansDto, Loans> {
         Loans loan = new Loans();
             loan.setLoaneeId(source.loanId());
             loan.setLoaneeName(source.loaneeName());
+            loan.setLoaneeInstitution(source.loaneeInstitution());
             loan.setLoaneeEmail(source.loaneeEmail());
             loan.setLoaneeAddress(source.loaneeAddress());
             loan.setLoanStartdate(source.loanStartdate());
             loan.setLoanDuedate(source.loanDuedate());
             loan.setMeteorites(source.meteorites());
             loan.setTrackingNumber(source.trackingNumber());
+//            loan.setStatus(source.status()); default should be active
             loan.setLoaneeNotes(source.loaneeNotes());
             loan.setExtraFiles(source.extraFiles());
-
         return loan;
     }
 }

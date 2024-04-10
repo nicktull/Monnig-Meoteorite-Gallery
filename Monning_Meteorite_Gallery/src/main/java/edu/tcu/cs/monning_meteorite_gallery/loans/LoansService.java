@@ -1,6 +1,8 @@
 package edu.tcu.cs.monning_meteorite_gallery.loans;
 
 import edu.tcu.cs.monning_meteorite_gallery.System.exception.ObjectNotFoundException;
+import edu.tcu.cs.monning_meteorite_gallery.meteorite.Meteorite;
+import edu.tcu.cs.monning_meteorite_gallery.meteorite.MeteoriteRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -11,8 +13,11 @@ import java.util.List;
 public class LoansService {
     private final LoansRepository loansRepository;
 
-    public LoansService(LoansRepository loansRepository) {
+    private final MeteoriteRepository meteoriteRepository;
+
+    public LoansService(LoansRepository loansRepository, MeteoriteRepository meteoriteRepository) {
         this.loansRepository = loansRepository;
+        this.meteoriteRepository = meteoriteRepository;
     }
 
     public List<Loans> getAllLoans() {return this.loansRepository.findAll();}
@@ -50,6 +55,32 @@ public class LoansService {
                     oldLoanee.setTrackingNumber(newLoanee.getTrackingNumber());
                     oldLoanee.setLoaneeNotes(newLoanee.getLoaneeNotes());
                     oldLoanee.setExtraFiles(newLoanee.getExtraFiles());
+                    return this.loansRepository.save(oldLoanee);
+                })
+                .orElseThrow(() -> new ObjectNotFoundException("loanee", loaneeId));
+    }
+
+    public void loanMeteorite(Integer loanId, String meteoriteId) {
+        // Find the meteorite by id from DB
+        Meteorite meteoriteToBeLoaned = this.meteoriteRepository.findById(meteoriteId)
+                .orElseThrow(() -> new ObjectNotFoundException("meteorite", meteoriteId));
+
+        // Find loanee by id from db
+        Loans loan = this.loansRepository.findById(loanId)
+                .orElseThrow(() -> new ObjectNotFoundException("loanee", loanId));
+
+        // loan meteorite
+        // Check if meteorite is already loaned to someone.
+        if(meteoriteToBeLoaned.getLoanee() != null){
+            meteoriteToBeLoaned.getLoanee().removeLoanee(meteoriteToBeLoaned);
+        }
+        loan.addMeteorite(meteoriteToBeLoaned);
+    }
+
+    public Loans archive(Integer loaneeId, Loans newLoanee) {
+        return this.loansRepository.findById(loaneeId)
+                .map(oldLoanee ->{
+                    oldLoanee.setStatus();
                     return this.loansRepository.save(oldLoanee);
                 })
                 .orElseThrow(() -> new ObjectNotFoundException("loanee", loaneeId));

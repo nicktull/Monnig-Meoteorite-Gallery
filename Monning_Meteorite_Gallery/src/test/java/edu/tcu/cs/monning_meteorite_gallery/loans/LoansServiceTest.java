@@ -2,6 +2,7 @@ package edu.tcu.cs.monning_meteorite_gallery.loans;
 
 import edu.tcu.cs.monning_meteorite_gallery.System.exception.ObjectNotFoundException;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.Meteorite;
+import edu.tcu.cs.monning_meteorite_gallery.meteorite.MeteoriteRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,9 @@ class LoansServiceTest {
 
     @Mock
     LoansRepository loansRepository;
+
+    @Mock
+    MeteoriteRepository meteoriteRepository;
 
     @InjectMocks
     LoansService loansService;
@@ -146,7 +150,7 @@ class LoansServiceTest {
         // Then
         assertThat(thrown)
                 .isInstanceOf(ObjectNotFoundException.class)
-                .hasMessage("Could not find loanee with id 1");
+                .hasMessage("Could not find loanee with Id 1");
         verify(loansRepository, times(1)).findById(1);
     }
 
@@ -299,4 +303,102 @@ class LoansServiceTest {
         // Then
         verify(this.loansRepository, times(1)).findById(1);
     }
+
+    @Test
+    void testLoanMeteoriteSuccess(){
+        // Given
+        Loans loanee = new Loans();
+
+        loanee.setLoaneeId(1);
+        loanee.setLoaneeName("John Doe");
+        loanee.setLoaneeInstitution("National Science Institute");
+        loanee.setLoaneeEmail("johndoe@example.com");
+        loanee.setLoaneeAddress("123 Science Lane, Research City, RC 45678");
+        loanee.setLoanStartdate("2024-01-01");
+        loanee.setLoanDuedate("2024-06-30");
+        loanee.setTrackingNumber("TN123456789");
+        loanee.setLoaneeNotes("Please handle with care, especially the fragile samples.");
+        loanee.setExtraFiles("loan_agreement.pdf, sample_list.xlsx");
+        loanee.setMeteorites(meteorites);
+
+        Loans loanee1 = new Loans();
+        loanee1.setLoaneeId(2);
+        loanee1.setLoaneeName("Jane Smith");
+        loanee1.setLoaneeInstitution("University of Technology");
+        loanee1.setLoaneeEmail("janesmith@example.com");
+        loanee1.setLoaneeAddress("123 Science Lane, Research City, RC 45678");
+        loanee1.setLoanStartdate("2024-01-01");
+        loanee1.setLoanDuedate("2024-06-30");
+        loanee1.setTrackingNumber("TN123456789");
+        loanee1.setLoaneeNotes("Please handle with care, especially the fragile samples.");
+        loanee1.setExtraFiles("loan_agreement.pdf, sample_list.xlsx");
+
+        Meteorite meteorite1 = new Meteorite();
+        meteorite1.setMonnigNumber("M001");
+        meteorite1.setName("Moon Rock");
+
+        meteorite1.setLoanee(loanee);
+
+        given(this.meteoriteRepository.findById("M001")).willReturn(Optional.of(meteorite1));
+        given(this.loansRepository.findById(2)).willReturn(Optional.of(loanee1));
+        // When
+        this.loansService.loanMeteorite(2, "M001");
+
+        // Then
+        assertThat(meteorite1.getLoanee()).isEqualTo(loanee1);
+    }
+
+    @Test
+    void testLoanMeteoriteErrorWithNonExistentLoanId(){
+        // Given
+        Loans loanee = new Loans();
+
+        loanee.setLoaneeId(1);
+        loanee.setLoaneeName("John Doe");
+        loanee.setLoaneeInstitution("National Science Institute");
+        loanee.setLoaneeEmail("johndoe@example.com");
+        loanee.setLoaneeAddress("123 Science Lane, Research City, RC 45678");
+        loanee.setLoanStartdate("2024-01-01");
+        loanee.setLoanDuedate("2024-06-30");
+        loanee.setTrackingNumber("TN123456789");
+        loanee.setLoaneeNotes("Please handle with care, especially the fragile samples.");
+        loanee.setExtraFiles("loan_agreement.pdf, sample_list.xlsx");
+        loanee.setMeteorites(meteorites);
+
+        Meteorite meteorite1 = new Meteorite();
+        meteorite1.setMonnigNumber("M001");
+        meteorite1.setName("Moon Rock");
+
+        meteorite1.setLoanee(loanee);
+
+        given(this.meteoriteRepository.findById("M001")).willReturn(Optional.of(meteorite1));
+        given(this.loansRepository.findById(2)).willReturn(Optional.empty());
+
+        // When
+        Throwable thrown = assertThrows(ObjectNotFoundException.class, () -> {
+            this.loansService.loanMeteorite(2, "M001");
+        });
+
+        // Then
+        assertThat(thrown)
+                .isInstanceOf(ObjectNotFoundException.class)
+                        .hasMessage("Could not find loanee with Id 3");
+        assertThat(meteorite1.getLoanee()).isEqualTo(loanee);
+    }
+
+    @Test
+    void testLoanMeteoriteErrorWithNonExistentMeteoriteId() {
+        given(this.meteoriteRepository.findById("M001")).willReturn(Optional.empty());
+
+        // When
+        Throwable thrown = assertThrows(ObjectNotFoundException.class, () -> {
+            this.loansService.loanMeteorite(2, "M001");
+        });
+
+        // Then
+        assertThat(thrown)
+                .isInstanceOf(ObjectNotFoundException.class)
+                .hasMessage("Could not find meteorite with Id M001");
+    }
+    //Implement test cases for archive
 }

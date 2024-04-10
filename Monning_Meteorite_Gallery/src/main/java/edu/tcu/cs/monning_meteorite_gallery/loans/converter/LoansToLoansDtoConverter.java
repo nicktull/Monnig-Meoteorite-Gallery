@@ -20,6 +20,7 @@ public class LoansToLoansDtoConverter implements Converter<Loans, LoansDto> {
                 source.getLoanStartdate(),
                 source.getLoanDuedate(),
                 source.getTrackingNumber(),
+                source.getStatus(),
                 source.getLoaneeNotes(),
                 source.getExtraFiles(),
                 source.getMeteorites());

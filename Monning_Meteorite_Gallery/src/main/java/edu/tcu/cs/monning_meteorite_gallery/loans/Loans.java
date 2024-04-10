@@ -38,6 +38,8 @@ public class Loans implements Serializable {
 
     private String extraFiles;
 
+    private String status = "Active";
+
     //Getters and Setters
 
 
@@ -129,8 +131,18 @@ public class Loans implements Serializable {
         this.extraFiles = extraFiles;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    //Is there a need to unarchive a loan?
+    public void setStatus() {
+        this.status = "Archived";
+    }
+
     public void addMeteorite(Meteorite meteorite) {
         meteorite.setLoanee(this);
+        meteorite.setLoanStatus();
         this.meteorites.add(meteorite);
     }
 
@@ -141,5 +153,11 @@ public class Loans implements Serializable {
     public void removeAllMeteorites() {
         this.meteorites.forEach(meteorite -> meteorite.setLoanee(null));
         this.meteorites.clear();
+    }
+
+    public void removeLoanee(Meteorite meteoriteToBeLoaned) {
+        meteoriteToBeLoaned.setLoanee(null);
+        meteoriteToBeLoaned.setLoanStatus();
+        this.meteorites.remove(meteoriteToBeLoaned);
     }
 }

@@ -126,7 +126,7 @@ class LoansControllerTest {
         this.mockMvc.perform(get(this.baseUrl + "/loans/1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(false))
                 .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
-                .andExpect(jsonPath("$.message").value("Could not find loanee with id 1"))
+                .andExpect(jsonPath("$.message").value("Could not find loanee with Id 1"))
                 .andExpect(jsonPath("$.data").isEmpty());
     }
 
@@ -165,6 +165,7 @@ class LoansControllerTest {
                 "2024-04-01",
                 "2024-10-01",
                 "TN123456789",
+                "Active",
                 "KAKATTE KOI!",
                 "agreement.pdf, item_list.xlsx",
                 Arrays.asList(meteorite1, meteorite2)
@@ -210,6 +211,7 @@ class LoansControllerTest {
                 "2024-04-01",
                 "2024-10-01",
                 "TN123456789",
+                "Active",
                 "Life is like a trampoline. The lower you fall, the higher you go.",
                 "agreement.pdf, item_list.xlsx",
                 Arrays.asList(meteorite1, meteorite2)
@@ -254,6 +256,7 @@ class LoansControllerTest {
                 "2024-05-01",
                 "2024-12-01",
                 "TN987654321",
+                "Active",
                 "KIRYU-CHAN!!!!",
                 "agreement.pdf, item_list.xlsx",
                 Arrays.asList(meteorite1, meteorite2)
@@ -265,7 +268,7 @@ class LoansControllerTest {
         this.mockMvc.perform(put(this.baseUrl + "/loans/7").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(false))
                 .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
-                .andExpect(jsonPath("$.message").value("Could not find loanee with id 7"))
+                .andExpect(jsonPath("$.message").value("Could not find loanee with Id 7"))
                 .andExpect(jsonPath("$.data").isEmpty());
     }
 
@@ -291,7 +294,48 @@ class LoansControllerTest {
         this.mockMvc.perform(delete(this.baseUrl + "/loans/7").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(false))
                 .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
-                .andExpect(jsonPath("$.message").value("Could not find loanee with id 7"))
+                .andExpect(jsonPath("$.message").value("Could not find loanee with Id 7"))
                 .andExpect(jsonPath("$.data").isEmpty());
     }
+
+    @Test
+    void testLoanMeteoriteSuccess() throws Exception {
+        // Given
+        doNothing().when(this.loansService).loanMeteorite(2, "M001");
+
+        // When and Then
+        this.mockMvc.perform(put(this.baseUrl + "/loans/2/meteorites/M001").accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.flag").value(true))
+                .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
+                .andExpect(jsonPath("$.message").value("Loan Meteorite Success"))
+                .andExpect(jsonPath("$.data").isEmpty());
+    }
+
+    @Test
+    void testLoanMeteoriteErrorWithNonExistentLoanId() throws Exception {
+        // Given
+        doThrow(new ObjectNotFoundException("loanee", 7)).when(this.loansService).loanMeteorite(7, "M001");
+
+        // When and Then
+        this.mockMvc.perform(put(this.baseUrl + "/loans/7/meteorites/M001").accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.flag").value(false))
+                .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
+                .andExpect(jsonPath("$.message").value("Could not find loanee with Id 7"))
+                .andExpect(jsonPath("$.data").isEmpty());
+    }
+
+    @Test
+    void testLoanMeteoriteErrorWithNonExistentMeteoriteId() throws Exception {
+        // Given
+        doThrow(new ObjectNotFoundException("meteorite", "M008")).when(this.loansService).loanMeteorite(1, "M008");
+
+        // When and Then
+        this.mockMvc.perform(put(this.baseUrl + "/loans/1/meteorites/M008").accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.flag").value(false))
+                .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
+                .andExpect(jsonPath("$.message").value("Could not find meteorite with Id M008"))
+                .andExpect(jsonPath("$.data").isEmpty());
+    }
+
+    //Implement test cases for findActiveLoans and findArchivedLoans
 }

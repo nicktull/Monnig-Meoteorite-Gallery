@@ -41,7 +41,7 @@ public class DBDataInitializer implements CommandLineRunner {
 
         Meteorite Abernathy = new Meteorite();
         Abernathy.setName("Abernathy");
-        Abernathy.setMonnigNumber("M239.1.1");
+        Abernathy.setMonnigNumber("M239.1");
         Abernathy.setCountry("USA");
         Abernathy.setMClass("Ordinary Chondrite");
         Abernathy.setMGroup("L");
@@ -66,6 +66,7 @@ public class DBDataInitializer implements CommandLineRunner {
         Majima.setLoanStartdate("2024-05-01");
         Majima.setLoanDuedate("2024-12-01");
         Majima.setTrackingNumber("TN987654321");
+//        Majima.setStatus("Archived"); default should be active
         Majima.setLoaneeNotes("KIRYU-CHAN!!!!");
         Majima.setExtraFiles("agreement.pdf, item_list.xlsx");
         Majima.addMeteorite(Abernathy);
@@ -80,6 +81,7 @@ public class DBDataInitializer implements CommandLineRunner {
         kiryu.setLoanStartdate("2024-04-01");
         kiryu.setLoanDuedate("2024-10-01");
         kiryu.setTrackingNumber("TN123456789");
+//        kiryu.setStatus("Active"); default should be active
         kiryu.setLoaneeNotes("Life is like a trampoline. The lower you fall, the higher you go.");
         kiryu.setExtraFiles("Kakattekoi.pdf, item_list.xlsx");
         kiryu.addMeteorite(Abee);
