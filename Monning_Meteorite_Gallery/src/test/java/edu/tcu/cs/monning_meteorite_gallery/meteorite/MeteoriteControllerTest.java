@@ -143,16 +143,16 @@ class MeteoriteControllerTest {
         given(this.meteoriteService.save(Mockito.any(Meteorite.class))).willReturn(savedMeteorite);
 
         // When and Then
-        this.mockMvc.perform(post(this.baseUrl + "/meteorites/").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(post(this.baseUrl + "/meteorites").contentType(MediaType.APPLICATION_JSON).content(json).accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.flag").value(true))
                 .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
                 .andExpect(jsonPath("$.message").value("Add Success"))
                 .andExpect(jsonPath("$.data.MonnigNumber").isNotEmpty())
-                .andExpect(jsonPath("$.data.name").value(savedMeteorite.getName()))
-                .andExpect(jsonPath("$.data.country").value(savedMeteorite.getCountry()))
-                .andExpect(jsonPath("$.data.class").value(savedMeteorite.getMClass()))
-                .andExpect(jsonPath("$.data.group").value(savedMeteorite.getMGroup()))
-                .andExpect(jsonPath("$.data.year").value(savedMeteorite.getYearFound()))
+                .andExpect(jsonPath("$.data.Name").value(savedMeteorite.getName()))
+                .andExpect(jsonPath("$.data.Country").value(savedMeteorite.getCountry()))
+                .andExpect(jsonPath("$.data.MClass").value(savedMeteorite.getMClass()))
+                .andExpect(jsonPath("$.data.MGroup").value(savedMeteorite.getMGroup()))
+                .andExpect(jsonPath("$.data.yearFound").value(savedMeteorite.getYearFound()))
                 .andExpect(jsonPath("$.data.weight").value(savedMeteorite.getWeight()));
 
     }
