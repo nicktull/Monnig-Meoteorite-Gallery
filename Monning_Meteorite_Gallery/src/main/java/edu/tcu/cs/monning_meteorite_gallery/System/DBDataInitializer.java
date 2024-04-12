@@ -2,7 +2,6 @@ package edu.tcu.cs.monning_meteorite_gallery.System;
 
 import edu.tcu.cs.monning_meteorite_gallery.loans.Loans;
 import edu.tcu.cs.monning_meteorite_gallery.loans.LoansRepository;
-import edu.tcu.cs.monning_meteorite_gallery.loans.dto.LoansDto;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.Meteorite;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.MeteoriteRepository;
 import org.springframework.boot.CommandLineRunner;
