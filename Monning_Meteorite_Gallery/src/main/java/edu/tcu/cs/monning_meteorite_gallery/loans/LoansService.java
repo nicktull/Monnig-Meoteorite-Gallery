@@ -6,7 +6,10 @@ import edu.tcu.cs.monning_meteorite_gallery.meteorite.MeteoriteRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -85,4 +88,8 @@ public class LoansService {
         loanToBeArchived.setStatus();
     }
 
+    public List<Loans> filterLoans(Predicate<Loans> criteria) {
+        List<Loans> allLoans = findAll(); // This should call the existing method that returns all loans
+        return allLoans.stream().filter(criteria).collect(Collectors.toList());
+    }
 }
