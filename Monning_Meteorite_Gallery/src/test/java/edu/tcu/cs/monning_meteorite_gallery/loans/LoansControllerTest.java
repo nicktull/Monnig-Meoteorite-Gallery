@@ -103,51 +103,6 @@ class LoansControllerTest {
     }
 
     @Test
-    void findLoansByIdSuccess() throws Exception{
-        // Given
-        given(this.loansService.findById(1)).willReturn(this.loanees.getFirst());
-
-        // When and Then
-        this.mockMvc.perform(get(this.baseUrl + "/loans/1").accept(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.flag").value(true))
-                .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
-                .andExpect(jsonPath("$.message").value("Found"))
-                .andExpect(jsonPath("$.data.loanId").value(1))
-                .andExpect(jsonPath("$.data.loaneeName").value("John Doe"));
-
-    }
-
-    @Test
-    void findLoansByIdFailure() throws Exception {
-        // Given
-        given(this.loansService.findById(1)).willThrow(new ObjectNotFoundException("loanee" ,1));
-
-        // When and Then
-        this.mockMvc.perform(get(this.baseUrl + "/loans/1").accept(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.flag").value(false))
-                .andExpect(jsonPath("$.code").value(StatusCode.NOT_FOUND))
-                .andExpect(jsonPath("$.message").value("Could not find loanee with Id 1"))
-                .andExpect(jsonPath("$.data").isEmpty());
-    }
-
-//    @Test
-//    void testFindAllLoansSuccess() throws Exception {
-//        // Given, Arrange inputs and targets. Define the behavior of Mock Objects
-//        given(this.loansService.findAll()).willReturn(this.loanees);
-//
-//        // When and Then
-//        this.mockMvc.perform(get(this.baseUrl + "/loans").accept(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("$.flag").value(true))
-//                .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
-//                .andExpect(jsonPath("$.message").value("Found All Loans"))
-//                .andExpect(jsonPath("$.data", Matchers.hasSize(this.loanees.size())))
-//                .andExpect(jsonPath("$.data[0].loanId").value(1))
-//                .andExpect(jsonPath("$.data[0].loaneeName").value("John Doe"))
-//                .andExpect(jsonPath("$.data[1].loanId").value(2))
-//                .andExpect(jsonPath("$.data[1].loaneeName").value("Jane Smith"));
-//    }
-
-    @Test
     void testAddLoanSuccess() throws Exception {
         Meteorite meteorite1 = new Meteorite();
         meteorite1.setMonnigNumber("M001");

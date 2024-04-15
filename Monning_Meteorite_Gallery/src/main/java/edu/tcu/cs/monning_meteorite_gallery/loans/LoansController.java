@@ -7,7 +7,9 @@ import edu.tcu.cs.monning_meteorite_gallery.loans.converter.LoansToLoansDtoConve
 import edu.tcu.cs.monning_meteorite_gallery.loans.dto.LoansDto;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,32 +31,74 @@ public class LoansController {
     }
 
     /**
-     *Finds a loan by its Id (LoaneeId located in Loans)
+     * Finds loans filtered by specified attributes with options for pagination and sorting.
+     * The method filters loans in-memory after retrieving a page of loans based on sorting criteria.
+     * This is suitable for smaller datasets. For bigger datasets, filter via database.
      *
-     * @param loansId the Id of the loan to find
-     * @return a result containing the found loan, if any
+     * @param loaneeId Optional ID of the loanee to filter by.
+     * @param loaneeName Optional name of the loanee to filter by.
+     * @param loaneeInstitution Optional institution associated with the loanee to filter by.
+     * @param loaneeEmail Optional email of the loanee to filter by.
+     * @param loaneeAddress Optional address of the loanee to filter by.
+     * @param loanStartdate Optional start date of the loan to filter by.
+     * @param loanDuedate Optional due date of the loan to filter by.
+     * @param trackingNumber Optional tracking number of the loan to filter by.
+     * @param loaneeNotes Optional notes associated with the loanee to filter by.
+     * @param extraFiles Optional extra files associated with the loan to filter by.
+     * @param status Optional status of the loan to filter by.
+     * @param page Page number for pagination.
+     * @param size Number of loans per page.
+     * @param sortBy Attribute and direction for sorting (e.g., "loaneeName,ASC").
+     * @return A result object that includes status, message, and a list of filtered loan DTOs.
      */
-    @GetMapping("/{loansId}")
-    public Result findLoansById(@PathVariable Integer loansId) {
-        Loans foundLoans = this.loansService.findById(loansId);
-        LoansDto loansDto = this.loansToLoansDtoConverter.convert(foundLoans);
-        return new Result(true, StatusCode.SUCCESS, "Found", loansDto);
+    @GetMapping("/search")
+    public Result searchLoans(
+            @RequestParam(required = false) Integer loaneeId,
+            @RequestParam(required = false) String loaneeName,
+            @RequestParam(required = false) String loaneeInstitution,
+            @RequestParam(required = false) String loaneeEmail,
+            @RequestParam(required = false) String loaneeAddress,
+            @RequestParam(required = false) String loanStartdate,
+            @RequestParam(required = false) String loanDuedate,
+            @RequestParam(required = false) String trackingNumber,
+            @RequestParam(required = false) String loaneeNotes,
+            @RequestParam(required = false) String extraFiles,
+            @RequestParam(required = false) String status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "loaneeId,DESC") String sortBy) {
+
+        String[] sortParams = sortBy.split(",");
+        Pageable pageable = PageRequest.of(page, size, Sort.by(
+                Sort.Direction.fromString(sortParams[1]), sortParams[0]));
+
+        // Fetch all loans using pageable
+        List<Loans> allLoans = loansService.findAll(pageable).getContent();
+
+        // Apply combined predicates
+        List<Loans> filteredLoans = allLoans.stream().filter(loan -> {
+            if (status != null && !loan.getStatus().equals(status)) return false;
+            if (loanStartdate != null && !loan.getLoanStartdate().equals(loanStartdate)) return false;
+            if (loanDuedate != null && !loan.getLoanDuedate().equals(loanDuedate)) return false;
+            if (loaneeId != null && !loan.getLoaneeId().equals(loaneeId)) return false;
+            if (loaneeName != null && !loan.getLoaneeName().equals(loaneeName)) return false;
+            if (loaneeInstitution != null && !loan.getLoaneeInstitution().equals(loaneeInstitution)) return false;
+            if (loaneeEmail != null && !loan.getLoaneeEmail().equals(loaneeEmail)) return false;
+            if (loaneeAddress != null && !loan.getLoaneeAddress().equals(loaneeAddress)) return false;
+            if (trackingNumber != null && !loan.getTrackingNumber().equals(trackingNumber)) return false;
+            if (loaneeNotes != null && !loan.getLoaneeNotes().equals(loaneeNotes)) return false;
+            if (extraFiles != null && !loan.getExtraFiles().equals(extraFiles)) return false;
+            return true; // Default case: include loan in result
+        }).toList();
+
+        // Convert filtered loans to DTOs
+        List<LoansDto> loanDtos = filteredLoans.stream()
+                .map(loansToLoansDtoConverter::convert)
+                .collect(Collectors.toList());
+
+        return new Result(true, StatusCode.SUCCESS, "Filtered Loans", loanDtos);
     }
 
-    /**
-     * Finds all loans
-     *
-     * @return a result containing all loans if any
-     */
-    @GetMapping
-    public Result findAllLoans(Pageable pageable) {
-        Page<Loans> loanPage = this.loansService.findAll(pageable);
-
-        // Convert loanPage to a list of loansDtoPage
-        Page<LoansDto> loansDtoPage = loanPage
-                .map(this.loansToLoansDtoConverter::convert);
-        return new Result(true, StatusCode.SUCCESS, "Found All Loans", loansDtoPage);
-    }
 
     /**
      * Adds a loan based on the arguments provided for loansDto
