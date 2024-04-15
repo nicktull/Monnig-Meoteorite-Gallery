@@ -4,6 +4,8 @@ import edu.tcu.cs.monning_meteorite_gallery.System.exception.ObjectNotFoundExcep
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.Meteorite;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.MeteoriteRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,8 +32,8 @@ public class LoansService {
                 .orElseThrow(() -> new ObjectNotFoundException("loanee", loaneeId));
     }
 
-    public List<Loans> findAll(){
-        return this.loansRepository.findAll();
+    public Page<Loans> findAll(Pageable pageable){
+        return this.loansRepository.findAll(pageable);
     }
 
     public Loans save (Loans newLoanee) {
@@ -88,8 +90,8 @@ public class LoansService {
         loanToBeArchived.setStatus();
     }
 
-    public List<Loans> filterLoans(Predicate<Loans> criteria) {
-        List<Loans> allLoans = findAll(); // This should call the existing method that returns all loans
-        return allLoans.stream().filter(criteria).collect(Collectors.toList());
-    }
+//    public List<Loans> filterLoans(Predicate<Loans> criteria) {
+//        List<Loans> allLoans = findAll(); // This should call the existing method that returns all loans
+//        return allLoans.stream().filter(criteria).collect(Collectors.toList());
+//    }
 }

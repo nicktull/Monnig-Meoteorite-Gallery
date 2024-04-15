@@ -2,17 +2,15 @@ package edu.tcu.cs.monning_meteorite_gallery.meteorite;
 
 import edu.tcu.cs.monning_meteorite_gallery.System.Result;
 import edu.tcu.cs.monning_meteorite_gallery.System.StatusCode;
-import edu.tcu.cs.monning_meteorite_gallery.loans.Loans;
-import edu.tcu.cs.monning_meteorite_gallery.loans.dto.LoansDto;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.converter.MeteoriteDtoToMeteoriteConverter;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.converter.MeteoriteToMeteoriteDtoConverter;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.dto.MeteoriteDto;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("${api.endpoint.base-url}/meteorites")
@@ -36,31 +34,30 @@ public class MeteoriteController {
     }
 
     @GetMapping
-    public Result findAllMeteorites(){
-        List<Meteorite> foundMeteorites = this.meteoriteService.findAll();
+    public Result findAllMeteorites(Pageable pageable){
+        Page<Meteorite> meteoritePage = this.meteoriteService.findAll(pageable);
 
-        // Convert foundMeteorites to a list of meteoriteDtos
-        List<MeteoriteDto> meteoriteDtos = foundMeteorites.stream()
-                .map(this.meteoriteToMeteoriteDtoConverter::convert)
-                .toList();
-        return new Result(true, StatusCode.SUCCESS, "Found All Meteorites",meteoriteDtos);
+        // Convert meteoritePage to a list of meteoriteDtoPage
+        Page<MeteoriteDto> meteoriteDtoPage = meteoritePage
+                .map(this.meteoriteToMeteoriteDtoConverter::convert);
+        return new Result(true, StatusCode.SUCCESS, "Found All Meteorites", meteoriteDtoPage);
     }
 
-    @GetMapping("/loaned")
-    public Result findAllLoanedMeteorites(){
-        List<Meteorite> foundMeteorites = this.meteoriteService.findAll();
-
-        //Find all meteorites that have been loaned
-        List<Meteorite> loanedMeteorites = foundMeteorites.stream()
-                .filter(meteorite -> meteorite.getLoanee() != null)
-                .toList();
-
-        // Convert foundMeteorites to a list of meteoriteDtos
-        List<MeteoriteDto> meteoriteDtos = loanedMeteorites.stream()
-                .map(this.meteoriteToMeteoriteDtoConverter::convert)
-                .toList();
-        return new Result(true, StatusCode.SUCCESS, "Found All Loaned Meteorites",meteoriteDtos);
-    }
+//    @GetMapping("/loaned")
+//    public Result findAllLoanedMeteorites(){
+//        List<Meteorite> foundMeteorites = this.meteoriteService.findAll();
+//
+//        //Find all meteorites that have been loaned
+//        List<Meteorite> loanedMeteorites = foundMeteorites.stream()
+//                .filter(meteorite -> meteorite.getLoanee() != null)
+//                .toList();
+//
+//        // Convert foundMeteorites to a list of meteoriteDtos
+//        List<MeteoriteDto> meteoriteDtos = loanedMeteorites.stream()
+//                .map(this.meteoriteToMeteoriteDtoConverter::convert)
+//                .toList();
+//        return new Result(true, StatusCode.SUCCESS, "Found All Loaned Meteorites",meteoriteDtos);
+//    }
 
     @PostMapping
     public Result addMeteorite(@Valid @RequestBody MeteoriteDto meteoriteDto){

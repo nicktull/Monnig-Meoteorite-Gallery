@@ -4,6 +4,8 @@ import edu.tcu.cs.monning_meteorite_gallery.System.exception.ObjectNotFoundExcep
 import edu.tcu.cs.monning_meteorite_gallery.loans.Loans;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.utils.IdWorker;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +28,7 @@ public class MeteoriteService {
                 .orElseThrow(()-> new ObjectNotFoundException("meteorite", meteoriteId));
     }
 
-    public List<Meteorite> findAll() {return this.meteoriteRepository.findAll();}
+    public Page<Meteorite> findAll(Pageable pageable) {return this.meteoriteRepository.findAll(pageable);}
 
     public Meteorite save (Meteorite newMeteorite){
         newMeteorite.setMonnigNumber(idWorker.nextId() + "");

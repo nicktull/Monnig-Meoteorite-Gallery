@@ -6,6 +6,8 @@ import edu.tcu.cs.monning_meteorite_gallery.loans.converter.LoansDtoToLoansConve
 import edu.tcu.cs.monning_meteorite_gallery.loans.converter.LoansToLoansDtoConverter;
 import edu.tcu.cs.monning_meteorite_gallery.loans.dto.LoansDto;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,67 +47,13 @@ public class LoansController {
      * @return a result containing all loans if any
      */
     @GetMapping
-    public Result findAllLoans() {
-        List<Loans> foundLoans = this.loansService.findAll();
+    public Result findAllLoans(Pageable pageable) {
+        Page<Loans> loanPage = this.loansService.findAll(pageable);
 
-        // Convert foundLoans to a list of loanDtos
-        List<LoansDto> loanDtos = foundLoans.stream()
-                .map(this.loansToLoansDtoConverter::convert)
-                .toList();
-        return new Result(true, StatusCode.SUCCESS, "Found All Loans",loanDtos);
-    }
-
-    @GetMapping("/search")
-    public Result searchLoans(
-            @RequestParam(required = false) String status,
-            @RequestParam(required = false) String loanStartdate) {
-        Predicate<Loans> statusPredicate = status == null ? loan -> true : loan -> loan.getStatus().equals(status);
-        Predicate<Loans> datePredicate = loanStartdate == null ? loan -> true : loan -> loan.getLoanStartdate().equals(loanStartdate);
-
-        List<Loans> filteredLoans = loansService.filterLoans(statusPredicate.and(datePredicate));
-        List<LoansDto> loanDtos = filteredLoans.stream()
-                .map(loansToLoansDtoConverter::convert)
-                .collect(Collectors.toList());
-
-        return new Result(true, StatusCode.SUCCESS, "Filtered Loans", loanDtos);
-    }
-
-    /**
-     * Returns a sorted list of loans based on whether the status of a loan is "Active"
-     *
-     * @return
-     */
-    @GetMapping("/activeLoans")
-    public Result findActiveLoans(){
-        List<Loans> foundLoans = this.loansService.findAll();
-
-        List<Loans> archivedLoans = foundLoans.stream()
-                .filter(loan -> loan.getStatus().equals("Active"))
-                .toList();
-
-        List<LoansDto> loanDtos = archivedLoans.stream()
-                .map(this.loansToLoansDtoConverter::convert)
-                .toList();
-        return new Result(true, StatusCode.SUCCESS, "Found All Active Loans", loanDtos);
-    }
-
-    /**
-     * Returns a sorted list of loans based on whether the status of a loan is "Archived"
-     *
-     * @return
-     */
-    @GetMapping("/archivedLoans")
-    public Result findArchivedLoans() {
-        List<Loans> foundLoans = this.loansService.findAll();
-
-        List<Loans> archivedLoans = foundLoans.stream()
-                .filter(loan -> loan.getStatus().equals("Archived"))
-                .toList();
-
-        List<LoansDto> loanDtos = archivedLoans.stream()
-                .map(this.loansToLoansDtoConverter::convert)
-                .toList();
-        return new Result(true, StatusCode.SUCCESS, "Found All Archived Loans", loanDtos);
+        // Convert loanPage to a list of loansDtoPage
+        Page<LoansDto> loansDtoPage = loanPage
+                .map(this.loansToLoansDtoConverter::convert);
+        return new Result(true, StatusCode.SUCCESS, "Found All Loans", loansDtoPage);
     }
 
     /**
