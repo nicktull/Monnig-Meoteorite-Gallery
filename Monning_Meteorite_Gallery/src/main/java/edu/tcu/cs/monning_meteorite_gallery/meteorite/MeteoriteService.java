@@ -52,5 +52,24 @@ public class MeteoriteService {
                 })
                 .orElseThrow(() -> new ObjectNotFoundException("meteorite", meteoriteId));
     }
+
+    public Meteorite subsample(String meteoriteId, Meteorite oldMeteorite){
+        //System.out.println(meteoriteId);
+        return this.meteoriteRepository.findById(meteoriteId)
+                .map(subsample ->{
+                    subsample.setMonnigNumber(oldMeteorite.getMonnigNumber());
+                    subsample.setName(oldMeteorite.getName());
+                    subsample.setYearFound(oldMeteorite.getYearFound());
+                    subsample.setCountry(oldMeteorite.getCountry());
+                    subsample.setMClass(oldMeteorite.getMClass());
+                    subsample.setMGroup(oldMeteorite.getMGroup());
+                    subsample.setWeight(oldMeteorite.getWeight());
+                    subsample.setLoanee(oldMeteorite.getLoanee());
+                    return this.meteoriteRepository.save(subsample);
+                })
+                .orElseThrow(() -> new ObjectNotFoundException("meteorite", meteoriteId));
+
+    }
+
 }
 

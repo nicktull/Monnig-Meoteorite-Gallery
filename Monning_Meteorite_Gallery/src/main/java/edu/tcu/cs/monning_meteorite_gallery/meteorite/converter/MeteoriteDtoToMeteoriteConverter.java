@@ -19,6 +19,7 @@ public class MeteoriteDtoToMeteoriteConverter implements Converter<MeteoriteDto,
             meteorite.setYearFound(source.yearFound());
             meteorite.setWeight(source.weight());
             meteorite.setLoanStatus();
+
             return meteorite;
     }
 }

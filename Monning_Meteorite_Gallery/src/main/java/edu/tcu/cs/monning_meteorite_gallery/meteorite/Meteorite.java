@@ -28,6 +28,8 @@ public class Meteorite implements Serializable {
 
     private String loanStatus = "Available";
 
+    private String subSample;
+
     @ManyToOne
     @JsonIgnore
     private Loans loanee;

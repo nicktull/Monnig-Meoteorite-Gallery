@@ -66,9 +66,10 @@ public class MeteoriteController {
     public Result addMeteorite(@Valid @RequestBody MeteoriteDto meteoriteDto){
         // Convert MeteoriteDto to meteorite
         Meteorite newMeteorite = this.meteoriteDtoToMeteoriteConverter.convert(meteoriteDto);
-        assert newMeteorite != null; //Make sure that newMeteorite cannot be null
+        // assert newMeteorite != null; //Make sure that newMeteorite cannot be null
         Meteorite savedMeteorite = this.meteoriteService.save(newMeteorite);
         MeteoriteDto savedMeteoriteDto = this.meteoriteToMeteoriteDtoConverter.convert(savedMeteorite);
+
         return new Result(true, StatusCode.SUCCESS, "Add Success", savedMeteoriteDto);
     }
 
@@ -86,5 +87,14 @@ public class MeteoriteController {
         this.meteoriteService.delete(meteoriteId);
         return new Result(true, StatusCode.SUCCESS, "Delete Success");
     }
+
+    @PostMapping("/{meteoriteId}")
+    public Result addSubSample(@PathVariable String meteoriteId, @Valid @RequestBody MeteoriteDto meteoriteDto){
+        Meteorite sample = this.meteoriteDtoToMeteoriteConverter.convert(meteoriteDto);
+        Meteorite newSubSampleMeteorite = this.meteoriteService.subsample(meteoriteId, sample);
+        MeteoriteDto newSubSampleMeteoriteDto = this.meteoriteToMeteoriteDtoConverter.convert(newSubSampleMeteorite);
+        return new Result(true, StatusCode.SUCCESS, "Add Subsample Success", newSubSampleMeteoriteDto);
+    }
+
 
 }

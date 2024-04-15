@@ -25,6 +25,7 @@ public class MeteoriteToMeteoriteDtoConverter implements Converter<Meteorite, Me
                                                         source.getYearFound(),
                                                         source.getWeight(),
                                                         source.getLoanStatus());
+
         return meteoriteDto;
     }
 

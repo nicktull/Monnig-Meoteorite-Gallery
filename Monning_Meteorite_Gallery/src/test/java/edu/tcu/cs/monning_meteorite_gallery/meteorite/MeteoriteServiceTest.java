@@ -209,4 +209,64 @@ class MeteoriteServiceTest {
         // Then
         verify(meteoriteRepository, times(1)).findById("M398.1");
     }
+
+
+    @Test
+    void addSubsampleSuccess(){
+
+        Meteorite oldMeteorite = new Meteorite();
+        oldMeteorite.setName("Abott");
+        oldMeteorite.setMonnigNumber("M398.1");
+        oldMeteorite.setCountry("USA");
+        oldMeteorite.setMClass("Ordinary Chondrite");
+        oldMeteorite.setMGroup("H");
+        oldMeteorite.setYearFound("1951");
+        oldMeteorite.setWeight("325.1");
+
+        Meteorite subsample = new Meteorite();
+        subsample.setName("Abott");
+        subsample.setMonnigNumber("M398.1.1");
+        subsample.setCountry("USA");
+        subsample.setMClass("Ordinary Chondrite");
+        subsample.setMGroup("H");
+        subsample.setYearFound("1951");
+        subsample.setWeight("325.1");
+
+        given(meteoriteRepository.save(subsample)).willReturn(subsample);
+        given(meteoriteRepository.findById("M398.1.1")).willReturn(Optional.of(subsample));
+
+        // When
+        Meteorite subsampleMeteorite = meteoriteService.subsample("M398.1.1", oldMeteorite);
+
+        // Then
+        assertThat(subsampleMeteorite.getMonnigNumber()).isEqualTo(subsample.getMonnigNumber());
+        assertThat(subsampleMeteorite.getYearFound()).isEqualTo(subsample.getYearFound());
+        verify(meteoriteRepository, times(1)).findById("M398.1.1");
+        verify(meteoriteRepository, times(1)).save(subsampleMeteorite);
+    }
+
+
+    @Test
+    void testAddSubsampleNotFound() {
+
+        Meteorite subsample = new Meteorite();
+        subsample.setName("Abott");
+        subsample.setMonnigNumber("M398.1.1");
+        subsample.setCountry("USA");
+        subsample.setMClass("Ordinary Chondrite");
+        subsample.setMGroup("H");
+        subsample.setYearFound("1951");
+        subsample.setWeight("325.1");
+
+        //Given
+        given(meteoriteRepository.findById("M398.1.1")).willReturn(Optional.empty());
+
+        // When
+        assertThrows(ObjectNotFoundException.class, ()->{
+            meteoriteService.subsample("M398.1.1", subsample);
+        });
+
+        // Then
+        verify(meteoriteRepository, times(1)).findById("M398.1.1");
+    }
 }

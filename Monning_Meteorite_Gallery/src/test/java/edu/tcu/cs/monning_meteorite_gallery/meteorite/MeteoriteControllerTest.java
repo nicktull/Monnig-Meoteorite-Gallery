@@ -247,4 +247,44 @@ class MeteoriteControllerTest {
                 .andExpect(jsonPath("$.data").isEmpty());
     }
 
+    @Test
+    void testAddSubsampleMeteoriteSuccess() throws Exception{
+        // Given
+        MeteoriteDto meteoriteDto = new MeteoriteDto(
+                "M398.1",
+                "Abott",
+                "USA",
+                "Ordinary Chrondite",
+                "H",
+                "1951",
+                "325.1",
+                null);
+        String json = this.objectMapper.writeValueAsString(meteoriteDto);
+
+        Meteorite subSampleMeteorite = new Meteorite();
+        subSampleMeteorite.setMonnigNumber("M398.1.1");
+        subSampleMeteorite.setName("Abott");
+        subSampleMeteorite.setCountry("USA");
+        subSampleMeteorite.setMClass("Ordinary Chrondite");
+        subSampleMeteorite.setMGroup("H");
+        subSampleMeteorite.setYearFound("1951");
+        subSampleMeteorite.setWeight("325.1");
+
+        given(this.meteoriteService.subsample(eq("M398.1.1"), Mockito.any(Meteorite.class))).willReturn(subSampleMeteorite);
+
+        //When and Then
+        this.mockMvc.perform(post(this.baseUrl + "/meteorites/M398.1.1").contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(jsonPath("$.flag").value(true))
+                .andExpect(jsonPath("$.code").value(StatusCode.SUCCESS))
+                .andExpect(jsonPath("$.message").value("Add Subsample Success"))
+                .andExpect(jsonPath("$.data.MonnigNumber").value("M398.1.1"))
+                .andExpect(jsonPath("$.data.Name").value(subSampleMeteorite.getName()))
+                .andExpect(jsonPath("$.data.Country").value(subSampleMeteorite.getCountry()))
+                .andExpect(jsonPath("$.data.MClass").value(subSampleMeteorite.getMClass()))
+                .andExpect(jsonPath("$.data.MGroup").value(subSampleMeteorite.getMGroup()))
+                .andExpect(jsonPath("$.data.yearFound").value(subSampleMeteorite.getYearFound()))
+                .andExpect(jsonPath("$.data.weight").value(subSampleMeteorite.getWeight()));
+    }
+
+
 }
