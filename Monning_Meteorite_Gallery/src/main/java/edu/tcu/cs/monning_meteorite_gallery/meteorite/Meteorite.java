@@ -2,11 +2,13 @@ package edu.tcu.cs.monning_meteorite_gallery.meteorite;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.tcu.cs.monning_meteorite_gallery.loans.Loans;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import edu.tcu.cs.monning_meteorite_gallery.samplehistory.SampleHistory;
+import edu.tcu.cs.monning_meteorite_gallery.samplehistory.SampleHistoryService;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Meteorite implements Serializable {
@@ -28,11 +30,13 @@ public class Meteorite implements Serializable {
 
     private String loanStatus = "Available";
 
-    private String subSample;
-
     @ManyToOne
     @JsonIgnore
     private Loans loanee;
+
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "meteor")
+    private List<SampleHistory> sampleHistory = new ArrayList<>();   // One meteor has many history
+
 
     public Meteorite() {}
 
@@ -111,4 +115,20 @@ public class Meteorite implements Serializable {
     public void setLoanee(Loans loanee) {
         this.loanee = loanee;
     }
+
+    public List<SampleHistory> getSampleHistory(){ return sampleHistory; }
+
+    public void setSampleHistory(List<SampleHistory> sampleHistory) { this.sampleHistory = sampleHistory; }
+
+    public void addSampleHistory(SampleHistory sampleHistory){
+        sampleHistory.setMeteor(this);
+        this.sampleHistory.add(sampleHistory);
+    }
+
+    public void removeSampleHistory(SampleHistory sampleHistoryToBeAssigned) {
+        sampleHistoryToBeAssigned.setMeteor(null);
+        this.sampleHistory.remove(sampleHistoryToBeAssigned);
+    }
+
+
 }

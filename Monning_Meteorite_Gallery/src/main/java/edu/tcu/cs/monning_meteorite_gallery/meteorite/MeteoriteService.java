@@ -3,9 +3,12 @@ package edu.tcu.cs.monning_meteorite_gallery.meteorite;
 import edu.tcu.cs.monning_meteorite_gallery.System.exception.ObjectNotFoundException;
 import edu.tcu.cs.monning_meteorite_gallery.loans.Loans;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.utils.IdWorker;
+import edu.tcu.cs.monning_meteorite_gallery.samplehistory.SampleHistory;
+import edu.tcu.cs.monning_meteorite_gallery.samplehistory.SampleHistoryRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,12 +17,14 @@ import java.util.List;
 @Transactional
 public class MeteoriteService {
     private final MeteoriteRepository meteoriteRepository;
+
     private final IdWorker idWorker;
 
     //Idworker generates an id
-    public MeteoriteService(MeteoriteRepository meteoriteRepository, IdWorker idWorker) {
+    public MeteoriteService(MeteoriteRepository meteoriteRepository, IdWorker idWorker, SampleHistoryRepository sampleHistoryRepository) {
         this.meteoriteRepository = meteoriteRepository;
         this.idWorker = idWorker;
+
     }
 
     public Meteorite findByID(String meteoriteId){
@@ -56,7 +61,6 @@ public class MeteoriteService {
     }
 
     public Meteorite subsample(String meteoriteId, Meteorite oldMeteorite){
-        //System.out.println(meteoriteId);
         return this.meteoriteRepository.findById(meteoriteId)
                 .map(subsample ->{
                     subsample.setMonnigNumber(oldMeteorite.getMonnigNumber());
@@ -70,8 +74,14 @@ public class MeteoriteService {
                     return this.meteoriteRepository.save(subsample);
                 })
                 .orElseThrow(() -> new ObjectNotFoundException("meteorite", meteoriteId));
-
     }
+
+
+
+//    public void assignSampleHistory(String meteoriteId, String sampleHistoryId){
+//        SampleHistory sampleHistoryToBeAssigned = this.sampleHistoryRepository.findById(sampleHistoryId).orElseThrow(() ->
+//                new ObjectNotFoundException("samplehistory", sampleHistoryId));
+//    }
 
 }
 

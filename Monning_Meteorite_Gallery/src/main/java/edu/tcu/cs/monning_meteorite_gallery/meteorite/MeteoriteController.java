@@ -5,6 +5,11 @@ import edu.tcu.cs.monning_meteorite_gallery.System.StatusCode;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.converter.MeteoriteDtoToMeteoriteConverter;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.converter.MeteoriteToMeteoriteDtoConverter;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.dto.MeteoriteDto;
+import edu.tcu.cs.monning_meteorite_gallery.samplehistory.SampleHistory;
+import edu.tcu.cs.monning_meteorite_gallery.samplehistory.SampleHistoryService;
+import edu.tcu.cs.monning_meteorite_gallery.samplehistory.converter.SampleHistoryDtoToSampleHistoryConverter;
+import edu.tcu.cs.monning_meteorite_gallery.samplehistory.converter.SampleHistoryToSampleHistoryDtoConverter;
+import edu.tcu.cs.monning_meteorite_gallery.samplehistory.dto.SampleHistoryDto;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,13 +22,20 @@ import java.util.List;
 public class MeteoriteController {
 
     private final MeteoriteService meteoriteService;
+
+    private final SampleHistoryService sampleHistoryService;
+    private final SampleHistoryToSampleHistoryDtoConverter sampleHistoryToSampleHistoryDtoConverter;
+    private final SampleHistoryDtoToSampleHistoryConverter sampleHistoryDtoToSampleHistoryConverter;
     private final MeteoriteToMeteoriteDtoConverter meteoriteToMeteoriteDtoConverter;
     private final MeteoriteDtoToMeteoriteConverter meteoriteDtoToMeteoriteConverter;
 
-    public MeteoriteController(MeteoriteService meteoriteService, MeteoriteToMeteoriteDtoConverter meteoriteToMeteoriteDtoConverter, MeteoriteDtoToMeteoriteConverter meteoriteDtoToMeteoriteConverter) {
+    public MeteoriteController(MeteoriteService meteoriteService, MeteoriteToMeteoriteDtoConverter meteoriteToMeteoriteDtoConverter, MeteoriteDtoToMeteoriteConverter meteoriteDtoToMeteoriteConverter, SampleHistoryService sampleHistoryService, SampleHistoryToSampleHistoryDtoConverter sampleHistoryToSampleHistoryDtoConverter, SampleHistoryDtoToSampleHistoryConverter sampleHistoryDtoToSampleHistoryConverter) {
         this.meteoriteService = meteoriteService;                                                                                                                     // Need to find the beans
         this.meteoriteToMeteoriteDtoConverter = meteoriteToMeteoriteDtoConverter;
         this.meteoriteDtoToMeteoriteConverter = meteoriteDtoToMeteoriteConverter;
+        this.sampleHistoryService = sampleHistoryService;
+        this.sampleHistoryToSampleHistoryDtoConverter = sampleHistoryToSampleHistoryDtoConverter;
+        this.sampleHistoryDtoToSampleHistoryConverter = sampleHistoryDtoToSampleHistoryConverter;
     }
 
     @GetMapping("/{meteoriteId}")
@@ -93,5 +105,18 @@ public class MeteoriteController {
         return new Result(true, StatusCode.SUCCESS, "Add Subsample Success", newSubSampleMeteoriteDto);
     }
 
+    @GetMapping("/samplehistory/{meteoriteId}")
+    public Result getSampleHistory(@PathVariable String meteoriteId){
+        Meteorite owner = this.meteoriteService.findByID(meteoriteId);
+        List<SampleHistory> sampleHistory = owner.getSampleHistory();
+        List<SampleHistoryDto> newSampleHistoryDto = sampleHistory.stream()
+                .map(this.sampleHistoryToSampleHistoryDtoConverter::convert)
+                .toList();
+        return new Result(true, StatusCode.SUCCESS, "Returned Sample History Successful.", newSampleHistoryDto);
+    }
 
+
+//    List<MeteoriteDto> meteoriteDtos = foundMeteorites.stream()
+//            .map(this.meteoriteToMeteoriteDtoConverter::convert)
+//            .toList();
 }
