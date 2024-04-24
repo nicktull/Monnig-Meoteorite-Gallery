@@ -17,19 +17,19 @@ public class SampleHistoryService {
         this.sampleHistoryRepository = sampleHistoryRepository;
     }
 
-    public SampleHistory findById(String sampleHistoryId){
-        return this.sampleHistoryRepository.findById(sampleHistoryId)
-                .orElseThrow(() -> new ObjectNotFoundException("sample history", sampleHistoryId));
+    public SampleHistory findById(Integer id){
+        return this.sampleHistoryRepository.findById(String.valueOf(id))
+                .orElseThrow(() -> new ObjectNotFoundException("sample history", id));
     }
 
     public SampleHistory save(SampleHistory newEntry) {
         return this.sampleHistoryRepository.save(newEntry);
     }
 
-    public void delete(String sampleHistoryId) {
-        this.sampleHistoryRepository.findById(sampleHistoryId)
-                .orElseThrow(() -> new ObjectNotFoundException("sample history", sampleHistoryId));
-        this.sampleHistoryRepository.deleteById(sampleHistoryId);
+    public void delete(Integer id) {
+        this.sampleHistoryRepository.findById(String.valueOf(id))
+                .orElseThrow(() -> new ObjectNotFoundException("sample history", id));
+        this.sampleHistoryRepository.deleteById(String.valueOf(id));
     }
 
 }

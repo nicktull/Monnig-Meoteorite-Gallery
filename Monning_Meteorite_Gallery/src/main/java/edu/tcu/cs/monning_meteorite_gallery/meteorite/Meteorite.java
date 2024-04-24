@@ -118,16 +118,14 @@ public class Meteorite implements Serializable {
 
     public List<SampleHistory> getSampleHistory(){ return sampleHistory; }
 
-    public void setSampleHistory(List<SampleHistory> sampleHistory) { this.sampleHistory = sampleHistory; }
+//    public void addSampleHistory(SampleHistory sampleHistory){
+//        sampleHistory.setMeteor(this);
+//        this.sampleHistory.add(sampleHistory);
+//    }
 
-    public void addSampleHistory(SampleHistory sampleHistory){
-        sampleHistory.setMeteor(this);
-        this.sampleHistory.add(sampleHistory);
-    }
-
-    public void removeSampleHistory(SampleHistory sampleHistoryToBeAssigned) {
-        sampleHistoryToBeAssigned.setMeteor(null);
-        this.sampleHistory.remove(sampleHistoryToBeAssigned);
+    public void removeSampleHistory() {
+        this.sampleHistory.forEach(sampleHistory -> sampleHistory.setMeteor(null));
+        this.sampleHistory = new ArrayList<>();
     }
 
 

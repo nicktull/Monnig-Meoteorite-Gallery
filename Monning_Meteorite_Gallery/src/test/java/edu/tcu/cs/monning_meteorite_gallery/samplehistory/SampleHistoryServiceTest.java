@@ -10,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,7 @@ class SampleHistoryServiceTest {
     void setUp() {
 
         SampleHistory s1 = new SampleHistory();
-        s1.setId("123456");
+        s1.setSampleHistoryId(123456);
         s1.setSampleCategory("Meow");
         s1.setSampleNotes("A cat makes the meow sound.");
 
@@ -53,7 +52,7 @@ class SampleHistoryServiceTest {
     @Test
     void testFindById(){
         SampleHistory s1 = new SampleHistory();
-        s1.setId("123456");
+        s1.setSampleHistoryId(123456);
         s1.setSampleDate("12/12/2025");
         s1.setSampleCategory("Created");
         s1.setSampleNotes("Create a new meteor.");
@@ -66,9 +65,9 @@ class SampleHistoryServiceTest {
 
         given(this.sampleHistoryRepository.findById("123456")).willReturn(Optional.of(s1));
 
-        SampleHistory returnedSampleHistory = this.sampleHistoryService.findById("123456");
+        SampleHistory returnedSampleHistory = this.sampleHistoryService.findById(123456);
 
-        assertThat(returnedSampleHistory.getId()).isEqualTo(s1.getId());
+        assertThat(returnedSampleHistory.getSampleHistoryId()).isEqualTo(s1.getSampleHistoryId());
         assertThat(returnedSampleHistory.getSampleDate()).isEqualTo(s1.getSampleDate());
         assertThat(returnedSampleHistory.getSampleCategory()).isEqualTo(s1.getSampleCategory());
         assertThat(returnedSampleHistory.getSampleNotes()).isEqualTo(s1.getSampleNotes());
@@ -80,7 +79,7 @@ class SampleHistoryServiceTest {
         given(this.sampleHistoryRepository.findById(Mockito.any(String.class))).willReturn(Optional.empty());
 
         Throwable thrown = catchThrowable(() -> {
-            SampleHistory returnedSampleHistory = this.sampleHistoryService.findById("123456");
+            SampleHistory returnedSampleHistory = this.sampleHistoryService.findById(123456);
         });
 
         assertThat(thrown)
@@ -95,7 +94,7 @@ class SampleHistoryServiceTest {
     void testAddSuccess(){
         //Given
         SampleHistory newEntry = new SampleHistory();
-        newEntry.setId("1");
+        newEntry.setSampleHistoryId(1);
         newEntry.setSampleCategory("Created");
         newEntry.setSampleNotes("This meteor is from space.");
 
@@ -105,7 +104,7 @@ class SampleHistoryServiceTest {
         SampleHistory savedEntry = this.sampleHistoryService.save(newEntry);
 
         //Then
-        assertThat(savedEntry.getId()).isEqualTo("1");
+        assertThat(savedEntry.getSampleHistoryId()).isEqualTo(1);
         assertThat(savedEntry.getSampleCategory()).isEqualTo(newEntry.getSampleCategory());
         assertThat(savedEntry.getSampleNotes()).isEqualTo(newEntry.getSampleNotes());
         verify(this.sampleHistoryRepository, times(1)).save(newEntry);
@@ -115,7 +114,8 @@ class SampleHistoryServiceTest {
     void testDeleteSucces(){
         //Given
         SampleHistory history = new SampleHistory();
-        history.setId("123456");
+        history.setSampleHistoryId(123456);
+        history.setSampleDate("12/12/2025");
         history.setSampleCategory("Cut");
         history.setSampleNotes("We are cutting this meteorite now.");
 
@@ -123,7 +123,7 @@ class SampleHistoryServiceTest {
         doNothing().when(this.sampleHistoryRepository).deleteById("123456");
 
         //When
-        this.sampleHistoryService.delete("123456");
+        this.sampleHistoryService.delete(123456);
 
         //Then
         verify(this.sampleHistoryRepository, times(1)).deleteById("123456");
@@ -137,7 +137,7 @@ class SampleHistoryServiceTest {
 
         //When
         assertThrows(ObjectNotFoundException.class, () -> {
-            this.sampleHistoryService.delete("123456");
+            this.sampleHistoryService.delete(123456);
         });
 
         //Then

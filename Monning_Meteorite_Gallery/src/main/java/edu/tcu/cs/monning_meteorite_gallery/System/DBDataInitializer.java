@@ -4,6 +4,8 @@ import edu.tcu.cs.monning_meteorite_gallery.loans.Loans;
 import edu.tcu.cs.monning_meteorite_gallery.loans.LoansRepository;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.Meteorite;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.MeteoriteRepository;
+import edu.tcu.cs.monning_meteorite_gallery.samplehistory.SampleHistory;
+import edu.tcu.cs.monning_meteorite_gallery.samplehistory.SampleHistoryRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +15,12 @@ public class DBDataInitializer implements CommandLineRunner {
     private final MeteoriteRepository meteoriteRepository;
     private final LoansRepository loansRepository;
 
-    public DBDataInitializer(MeteoriteRepository meteoriteRepository, LoansRepository loansRepository) {
+    private final SampleHistoryRepository sampleHistoryRepository;
+
+    public DBDataInitializer(MeteoriteRepository meteoriteRepository, LoansRepository loansRepository, SampleHistoryRepository sampleHistoryRepository) {
         this.meteoriteRepository = meteoriteRepository;
         this.loansRepository = loansRepository;
+        this.sampleHistoryRepository = sampleHistoryRepository;
     }
 
     @Override
@@ -94,6 +99,21 @@ public class DBDataInitializer implements CommandLineRunner {
 
         loansRepository.save(Majima);
         loansRepository.save(kiryu);
+
+        SampleHistory entry1 = new SampleHistory();
+        entry1.setSampleDate("12/12/2025");
+        entry1.setSampleCategory("Created");
+        entry1.setSampleNotes("Adding new meteoeite to the system, meow.");
+        entry1.setMeteor(Abernathy);
+
+        SampleHistory entry2 = new SampleHistory();
+        entry2.setSampleDate("11/11/2024");
+        entry2.setSampleCategory("Deleted");
+        entry2.setSampleNotes("Deleting meteorite from database in 10 days, ruff.");
+        entry2.setMeteor(Abee);
+
+        sampleHistoryRepository.save(entry1);
+        sampleHistoryRepository.save(entry2);
 
     }
 }

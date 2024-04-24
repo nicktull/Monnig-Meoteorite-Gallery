@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class SampleHistory implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) //Automatically generate an id
-    private String id;
+    private Integer sampleHistoryId;
 
     private String sampleDate;
 
@@ -23,9 +23,9 @@ public class SampleHistory implements Serializable {
     public SampleHistory(){
     }
 
-    public String getId(){ return id;}
+    public Integer getSampleHistoryId(){ return sampleHistoryId;}
 
-    public void setId(String id) { this.id = id; }
+    public void setSampleHistoryId(Integer id) { this.sampleHistoryId = id; }
 
     public String getSampleDate() {return sampleDate;}
 

@@ -4,7 +4,6 @@ import edu.tcu.cs.monning_meteorite_gallery.loans.dto.LoansDto;
 import jakarta.validation.constraints.NotEmpty;
 
 public record MeteoriteDto(
-        @NotEmpty(message = "Monnig Number is Required")
         String MonnigNumber,
         @NotEmpty(message = "Name is Required")
         String Name,

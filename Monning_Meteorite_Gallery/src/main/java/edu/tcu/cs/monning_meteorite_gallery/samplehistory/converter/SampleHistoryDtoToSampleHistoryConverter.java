@@ -11,7 +11,7 @@ public class SampleHistoryDtoToSampleHistoryConverter implements Converter<Sampl
     @Override
     public SampleHistory convert(SampleHistoryDto source) {
         SampleHistory sampleHistory = new SampleHistory();
-            sampleHistory.setId(source.id());
+            sampleHistory.setSampleHistoryId(source.id());
             sampleHistory.setSampleDate(source.sampleDate());
             sampleHistory.setSampleCategory(source.sampleCategory());
             sampleHistory.setSampleNotes(source.sampleNotes());

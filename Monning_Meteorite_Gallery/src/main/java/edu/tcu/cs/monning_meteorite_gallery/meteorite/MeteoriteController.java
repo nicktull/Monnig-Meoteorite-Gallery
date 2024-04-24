@@ -2,6 +2,8 @@ package edu.tcu.cs.monning_meteorite_gallery.meteorite;
 
 import edu.tcu.cs.monning_meteorite_gallery.System.Result;
 import edu.tcu.cs.monning_meteorite_gallery.System.StatusCode;
+import edu.tcu.cs.monning_meteorite_gallery.loans.Loans;
+import edu.tcu.cs.monning_meteorite_gallery.loans.dto.LoansDto;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.converter.MeteoriteDtoToMeteoriteConverter;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.converter.MeteoriteToMeteoriteDtoConverter;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.dto.MeteoriteDto;
@@ -12,31 +14,85 @@ import edu.tcu.cs.monning_meteorite_gallery.samplehistory.converter.SampleHistor
 import edu.tcu.cs.monning_meteorite_gallery.samplehistory.dto.SampleHistoryDto;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("${api.endpoint.base-url}/meteorites")
 public class MeteoriteController {
 
     private final MeteoriteService meteoriteService;
-
-    private final SampleHistoryService sampleHistoryService;
-    private final SampleHistoryToSampleHistoryDtoConverter sampleHistoryToSampleHistoryDtoConverter;
-    private final SampleHistoryDtoToSampleHistoryConverter sampleHistoryDtoToSampleHistoryConverter;
     private final MeteoriteToMeteoriteDtoConverter meteoriteToMeteoriteDtoConverter;
     private final MeteoriteDtoToMeteoriteConverter meteoriteDtoToMeteoriteConverter;
 
-    public MeteoriteController(MeteoriteService meteoriteService, MeteoriteToMeteoriteDtoConverter meteoriteToMeteoriteDtoConverter, MeteoriteDtoToMeteoriteConverter meteoriteDtoToMeteoriteConverter, SampleHistoryService sampleHistoryService, SampleHistoryToSampleHistoryDtoConverter sampleHistoryToSampleHistoryDtoConverter, SampleHistoryDtoToSampleHistoryConverter sampleHistoryDtoToSampleHistoryConverter) {
+    public MeteoriteController(MeteoriteService meteoriteService, MeteoriteToMeteoriteDtoConverter meteoriteToMeteoriteDtoConverter, MeteoriteDtoToMeteoriteConverter meteoriteDtoToMeteoriteConverter) {
         this.meteoriteService = meteoriteService;                                                                                                                     // Need to find the beans
         this.meteoriteToMeteoriteDtoConverter = meteoriteToMeteoriteDtoConverter;
         this.meteoriteDtoToMeteoriteConverter = meteoriteDtoToMeteoriteConverter;
-        this.sampleHistoryService = sampleHistoryService;
-        this.sampleHistoryToSampleHistoryDtoConverter = sampleHistoryToSampleHistoryDtoConverter;
-        this.sampleHistoryDtoToSampleHistoryConverter = sampleHistoryDtoToSampleHistoryConverter;
     }
+
+    /**
+     * Finds meteorites filtered by specified attributes with options for pagination and sorting.
+     * The method filters meteorites in-memory after retrieving a page of meteorites based on sorting criteria.
+     *
+     *
+     * @param name Optional name of the meteorite to filter by.
+     * @param country Optional country of meteorite
+     * @param MClass Optional MClass of meteorite
+     * @param MGroup Optional MGroup of meteorite
+     * @param yearFound Optional yearFound of meteorite
+     * @param weight Optional weight of meteorite
+     * @param loanStatus Optional loan status of meteorite
+     *
+     * @return A result object that includes status, message, message, and a list of filtered meteorites DTOs.
+     */
+    @GetMapping("/search")
+    public Result searchMeteorite(
+            @RequestParam(required = false) String monnigNumber,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String country,
+            @RequestParam(required = false) String MClass,
+            @RequestParam(required = false) String MGroup,
+            @RequestParam(required = false) String yearFound,
+            @RequestParam(required = false) String weight,
+            @RequestParam(required = false) String loanStatus,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "monnigNumber,DESC") String sortBy) {
+
+        String[] sortParams = sortBy.split(",");
+        Pageable pageable = PageRequest.of(page, size, Sort.by(
+                Sort.Direction.fromString(sortParams[1]), sortParams[0]));
+
+        // Fetch all meteorites using pageable
+        List<Meteorite> allMeteorites = meteoriteService.findAll(pageable).getContent();
+
+        // Apply combined predicates
+        List<Meteorite> filteredMeteorites = allMeteorites.stream().filter(meteorite -> {
+            if (monnigNumber != null && !meteorite.getMonnigNumber().equals(monnigNumber)) return false;
+            if (name != null && !meteorite.getName().equals(name)) return false;
+            if (country != null && !meteorite.getCountry().equals(country)) return false;
+            if (MClass != null && !meteorite.getMClass().equals(MClass)) return false;
+            if (MGroup != null && !meteorite.getMGroup().equals(MGroup)) return false;
+            if (yearFound != null && !meteorite.getYearFound().equals(yearFound)) return false;
+            if (weight != null && !meteorite.getWeight().equals(weight)) return false;
+            if (loanStatus != null && !meteorite.getLoanStatus().equals(loanStatus)) return false;
+            return true; // Default case: include meteorite in result
+        }).toList();
+
+        // Convert filtered Meteorites to DTOs
+        List<MeteoriteDto> meteoriteDtos = filteredMeteorites.stream()
+                .map(meteoriteToMeteoriteDtoConverter::convert)
+                .collect(Collectors.toList());
+
+        return new Result (true, StatusCode.SUCCESS, "Filtered Meteorites", meteoriteDtos);
+    }
+
 
     @GetMapping("/{meteoriteId}")
     public Result findMeteoriteById(@PathVariable String meteoriteId){
@@ -55,27 +111,11 @@ public class MeteoriteController {
         return new Result(true, StatusCode.SUCCESS, "Found All Meteorites", meteoriteDtoPage);
     }
 
-//    @GetMapping("/loaned")
-//    public Result findAllLoanedMeteorites(){
-//        List<Meteorite> foundMeteorites = this.meteoriteService.findAll();
-//
-//        //Find all meteorites that have been loaned
-//        List<Meteorite> loanedMeteorites = foundMeteorites.stream()
-//                .filter(meteorite -> meteorite.getLoanee() != null)
-//                .toList();
-//
-//        // Convert foundMeteorites to a list of meteoriteDtos
-//        List<MeteoriteDto> meteoriteDtos = loanedMeteorites.stream()
-//                .map(this.meteoriteToMeteoriteDtoConverter::convert)
-//                .toList();
-//        return new Result(true, StatusCode.SUCCESS, "Found All Loaned Meteorites",meteoriteDtos);
-//    }
-
     @PostMapping
     public Result addMeteorite(@Valid @RequestBody MeteoriteDto meteoriteDto){
         // Convert MeteoriteDto to meteorite
         Meteorite newMeteorite = this.meteoriteDtoToMeteoriteConverter.convert(meteoriteDto);
-        // assert newMeteorite != null; //Make sure that newMeteorite cannot be null
+        assert newMeteorite != null; //Make sure that newMeteorite cannot be null
         Meteorite savedMeteorite = this.meteoriteService.save(newMeteorite);
         MeteoriteDto savedMeteoriteDto = this.meteoriteToMeteoriteDtoConverter.convert(savedMeteorite);
 
@@ -97,7 +137,7 @@ public class MeteoriteController {
         return new Result(true, StatusCode.SUCCESS, "Delete Success");
     }
 
-    @PostMapping("/{meteoriteId}")
+    @PostMapping("/addSubSample/{meteoriteId}")
     public Result addSubSample(@PathVariable String meteoriteId, @Valid @RequestBody MeteoriteDto meteoriteDto){
         Meteorite sample = this.meteoriteDtoToMeteoriteConverter.convert(meteoriteDto);
         Meteorite newSubSampleMeteorite = this.meteoriteService.subsample(meteoriteId, sample);
@@ -105,18 +145,4 @@ public class MeteoriteController {
         return new Result(true, StatusCode.SUCCESS, "Add Subsample Success", newSubSampleMeteoriteDto);
     }
 
-    @GetMapping("/samplehistory/{meteoriteId}")
-    public Result getSampleHistory(@PathVariable String meteoriteId){
-        Meteorite owner = this.meteoriteService.findByID(meteoriteId);
-        List<SampleHistory> sampleHistory = owner.getSampleHistory();
-        List<SampleHistoryDto> newSampleHistoryDto = sampleHistory.stream()
-                .map(this.sampleHistoryToSampleHistoryDtoConverter::convert)
-                .toList();
-        return new Result(true, StatusCode.SUCCESS, "Returned Sample History Successful.", newSampleHistoryDto);
-    }
-
-
-//    List<MeteoriteDto> meteoriteDtos = foundMeteorites.stream()
-//            .map(this.meteoriteToMeteoriteDtoConverter::convert)
-//            .toList();
 }

@@ -363,5 +363,5 @@ class LoansServiceTest {
                 .isInstanceOf(ObjectNotFoundException.class)
                 .hasMessage("Could not find loanee with Id 1");
     }
-    //Implement test cases for archive
+
 }

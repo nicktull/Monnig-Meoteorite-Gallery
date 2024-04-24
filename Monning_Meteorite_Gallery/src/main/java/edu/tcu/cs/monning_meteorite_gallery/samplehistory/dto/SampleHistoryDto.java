@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
 
-public record SampleHistoryDto (String id,
+public record SampleHistoryDto (Integer id,
 
     @NotEmpty(message = "Date is Required")
     String sampleDate,

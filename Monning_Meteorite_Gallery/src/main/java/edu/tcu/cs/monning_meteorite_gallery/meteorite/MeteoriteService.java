@@ -1,10 +1,10 @@
 package edu.tcu.cs.monning_meteorite_gallery.meteorite;
 
 import edu.tcu.cs.monning_meteorite_gallery.System.exception.ObjectNotFoundException;
-import edu.tcu.cs.monning_meteorite_gallery.loans.Loans;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.utils.IdWorker;
 import edu.tcu.cs.monning_meteorite_gallery.samplehistory.SampleHistory;
 import edu.tcu.cs.monning_meteorite_gallery.samplehistory.SampleHistoryRepository;
+import edu.tcu.cs.monning_meteorite_gallery.samplehistory.SampleHistoryService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,12 +18,15 @@ import java.util.List;
 public class MeteoriteService {
     private final MeteoriteRepository meteoriteRepository;
 
+    private final SampleHistoryService sampleHistoryService;
+
     private final IdWorker idWorker;
 
     //Idworker generates an id
-    public MeteoriteService(MeteoriteRepository meteoriteRepository, IdWorker idWorker, SampleHistoryRepository sampleHistoryRepository) {
+    public MeteoriteService(MeteoriteRepository meteoriteRepository, IdWorker idWorker, SampleHistoryRepository sampleHistoryRepository, SampleHistoryService sampleHistoryService) {
         this.meteoriteRepository = meteoriteRepository;
         this.idWorker = idWorker;
+        this.sampleHistoryService = sampleHistoryService;
 
     }
 
@@ -41,7 +44,10 @@ public class MeteoriteService {
     }
 
     public void delete(String meteoriteId){
-        this.meteoriteRepository.findById(meteoriteId).orElseThrow(() -> new ObjectNotFoundException("meteorite", meteoriteId));
+        Meteorite meteoriteToBeDeleted = this.meteoriteRepository.findById(meteoriteId).orElseThrow(() -> new ObjectNotFoundException("meteorite", meteoriteId));
+        List<SampleHistory> history = meteoriteToBeDeleted.getSampleHistory();
+        meteoriteToBeDeleted.removeSampleHistory();
+        history.forEach(sampleHistory -> this.sampleHistoryService.delete(sampleHistory.getSampleHistoryId()));
         this.meteoriteRepository.deleteById(meteoriteId);
     }
 
@@ -63,7 +69,6 @@ public class MeteoriteService {
     public Meteorite subsample(String meteoriteId, Meteorite oldMeteorite){
         return this.meteoriteRepository.findById(meteoriteId)
                 .map(subsample ->{
-                    subsample.setMonnigNumber(oldMeteorite.getMonnigNumber());
                     subsample.setName(oldMeteorite.getName());
                     subsample.setYearFound(oldMeteorite.getYearFound());
                     subsample.setCountry(oldMeteorite.getCountry());
@@ -75,13 +80,6 @@ public class MeteoriteService {
                 })
                 .orElseThrow(() -> new ObjectNotFoundException("meteorite", meteoriteId));
     }
-
-
-
-//    public void assignSampleHistory(String meteoriteId, String sampleHistoryId){
-//        SampleHistory sampleHistoryToBeAssigned = this.sampleHistoryRepository.findById(sampleHistoryId).orElseThrow(() ->
-//                new ObjectNotFoundException("samplehistory", sampleHistoryId));
-//    }
 
 }
 
