@@ -1,5 +1,6 @@
 package edu.tcu.cs.monning_meteorite_gallery.loans;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.Meteorite;
 import jakarta.persistence.*;
 
@@ -25,8 +26,11 @@ public class Loans implements Serializable {
 
     private String loanDuedate;
 
+    @JsonIgnore
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "loanee")
     private List<Meteorite> meteorites = new ArrayList<>();
+
+
 
     public Loans(){
 

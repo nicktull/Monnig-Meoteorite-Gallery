@@ -34,6 +34,7 @@ public class Meteorite implements Serializable {
     @JsonIgnore
     private Loans loanee;
 
+    @JsonIgnore
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "meteor")
     private List<SampleHistory> sampleHistory = new ArrayList<>();   // One meteor has many history
 
