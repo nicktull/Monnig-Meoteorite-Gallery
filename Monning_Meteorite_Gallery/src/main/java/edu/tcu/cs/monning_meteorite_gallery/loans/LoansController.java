@@ -53,7 +53,7 @@ public class LoansController {
      */
     @GetMapping("/search")
     public Result searchLoans(
-            @RequestParam(required = false) Integer loaneeId,
+            @RequestParam(required = false) Integer loanId,
             @RequestParam(required = false) String loaneeName,
             @RequestParam(required = false) String loaneeInstitution,
             @RequestParam(required = false) String loaneeEmail,
@@ -66,11 +66,13 @@ public class LoansController {
             @RequestParam(required = false) String status,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "loaneeId,DESC") String sortBy) {
+            @RequestParam(defaultValue = "loanId,ASC") String sortBy) {
 
         String[] sortParams = sortBy.split(",");
-        Pageable pageable = PageRequest.of(page, size, Sort.by(
-                Sort.Direction.fromString(sortParams[1]), sortParams[0]));
+        Pageable pageable = PageRequest.of(
+                page, size, Sort.by(
+                        Sort.Direction.fromString(sortParams[1]), sortParams[0])
+        );
 
         // Fetch all loans using pageable
         List<Loans> allLoans = loansService.findAll(pageable).getContent();
@@ -80,7 +82,7 @@ public class LoansController {
             if (status != null && !loan.getStatus().equals(status)) return false;
             if (loanStartdate != null && !loan.getLoanStartdate().equals(loanStartdate)) return false;
             if (loanDuedate != null && !loan.getLoanDuedate().equals(loanDuedate)) return false;
-            if (loaneeId != null && !loan.getLoaneeId().equals(loaneeId)) return false;
+            if (loanId != null && !loan.getLoanId().equals(loanId)) return false;
             if (loaneeName != null && !loan.getLoaneeName().equals(loaneeName)) return false;
             if (loaneeInstitution != null && !loan.getLoaneeInstitution().equals(loaneeInstitution)) return false;
             if (loaneeEmail != null && !loan.getLoaneeEmail().equals(loaneeEmail)) return false;

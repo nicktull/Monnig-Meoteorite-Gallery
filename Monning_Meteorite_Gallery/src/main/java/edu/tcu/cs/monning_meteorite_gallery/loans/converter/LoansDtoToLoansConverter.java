@@ -11,7 +11,7 @@ public class LoansDtoToLoansConverter implements Converter<LoansDto, Loans> {
     @Override
     public Loans convert(LoansDto source) {
         Loans loan = new Loans();
-            loan.setLoaneeId(source.loanId());
+            loan.setLoanId(source.loanId());
             loan.setLoaneeName(source.loaneeName());
             loan.setLoaneeInstitution(source.loaneeInstitution());
             loan.setLoaneeEmail(source.loaneeEmail());

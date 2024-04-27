@@ -12,7 +12,7 @@ import java.util.List;
 public class Loans implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) //Automatically generate an id
-    private Integer loaneeId;
+    private Integer loanId;
 
     private String loaneeName;
 
@@ -47,12 +47,12 @@ public class Loans implements Serializable {
     //Getters and Setters
 
 
-    public Integer getLoaneeId() {
-        return loaneeId;
+    public Integer getLoanId() {
+        return loanId;
     }
 
-    public void setLoaneeId(Integer loaneeId) {
-        this.loaneeId = loaneeId;
+    public void setLoanId(Integer loanId) {
+        this.loanId = loanId;
     }
 
     public String getLoaneeName() {
