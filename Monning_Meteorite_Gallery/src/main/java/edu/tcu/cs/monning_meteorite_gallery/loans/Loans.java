@@ -1,5 +1,6 @@
 package edu.tcu.cs.monning_meteorite_gallery.loans;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.Meteorite;
 import jakarta.persistence.*;
 
@@ -11,7 +12,7 @@ import java.util.List;
 public class Loans implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) //Automatically generate an id
-    private Integer loaneeId;
+    private Integer loanId;
 
     private String loaneeName;
 
@@ -25,8 +26,11 @@ public class Loans implements Serializable {
 
     private String loanDuedate;
 
+    @JsonIgnore
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "loanee")
     private List<Meteorite> meteorites = new ArrayList<>();
+
+
 
     public Loans(){
 
@@ -43,12 +47,12 @@ public class Loans implements Serializable {
     //Getters and Setters
 
 
-    public Integer getLoaneeId() {
-        return loaneeId;
+    public Integer getLoanId() {
+        return loanId;
     }
 
-    public void setLoaneeId(Integer loaneeId) {
-        this.loaneeId = loaneeId;
+    public void setLoanId(Integer loanId) {
+        this.loanId = loanId;
     }
 
     public String getLoaneeName() {

@@ -59,7 +59,7 @@ class LoansControllerTest {
         this.loanees = new ArrayList<>();
 
         Loans johnDoe = new Loans();
-        johnDoe.setLoaneeId(1);
+        johnDoe.setLoanId(1);
         johnDoe.setLoaneeName("John Doe");
         johnDoe.setLoaneeInstitution("National Science Institute");
         johnDoe.setLoaneeEmail("johndoe@example.com");
@@ -72,7 +72,7 @@ class LoansControllerTest {
         johnDoe.setMeteorites(meteorites);
 
         Loans janeSmith = new Loans();
-        janeSmith.setLoaneeId(2);
+        janeSmith.setLoanId(2);
         janeSmith.setLoaneeName("Jane Smith");
         janeSmith.setLoaneeInstitution("University of Technology");
         janeSmith.setLoaneeEmail("janesmith@example.com");
@@ -129,7 +129,7 @@ class LoansControllerTest {
         String json = this.objectMapper.writeValueAsString(loansDto);
 
         Loans savedLoanee = new Loans();
-        savedLoanee.setLoaneeId(3);
+        savedLoanee.setLoanId(3);
         savedLoanee.setLoaneeName("Kazuma Kiryu");
         savedLoanee.setLoaneeInstitution("Yakuza Foundation");
 
@@ -173,7 +173,7 @@ class LoansControllerTest {
         );
 
         Loans updatedLoans = new Loans();
-        updatedLoans.setLoaneeId(1);
+        updatedLoans.setLoanId(1);
         updatedLoans.setLoaneeName("Kazuma Kiryu");
 
         String json = this.objectMapper.writeValueAsString(loansDto);

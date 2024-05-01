@@ -44,7 +44,7 @@ class LoansServiceTest {
         this.loanees = new ArrayList<>();
 
         Loans johnDoe = new Loans();
-        johnDoe.setLoaneeId(1);
+        johnDoe.setLoanId(1);
         johnDoe.setLoaneeName("John Doe");
         johnDoe.setLoaneeInstitution("National Science Institute");
         johnDoe.setLoaneeEmail("johndoe@example.com");
@@ -57,7 +57,7 @@ class LoansServiceTest {
         johnDoe.setMeteorites(meteorites);
 
         Loans janeSmith = new Loans();
-        janeSmith.setLoaneeId(2);
+        janeSmith.setLoanId(2);
         janeSmith.setLoaneeName("Jane Smith");
         janeSmith.setLoaneeInstitution("University of Technology");
         janeSmith.setLoaneeEmail("janesmith@example.com");
@@ -112,7 +112,7 @@ class LoansServiceTest {
     void testUpdateSuccess(){
         // Given
         Loans oldLoanee = new Loans();
-        oldLoanee.setLoaneeId(1);
+        oldLoanee.setLoanId(1);
         oldLoanee.setLoaneeName("John Doe");
         oldLoanee.setLoaneeInstitution("National Science Institute");
         oldLoanee.setLoaneeEmail("johndoe@example.com");
@@ -143,7 +143,7 @@ class LoansServiceTest {
         Loans updatedLoanee = loansService.update(1, newLoanee);
 
         // Then
-        assertThat(updatedLoanee.getLoaneeId()).isEqualTo(1);
+        assertThat(updatedLoanee.getLoanId()).isEqualTo(1);
         assertThat(updatedLoanee.getLoaneeName()).isEqualTo(newLoanee.getLoaneeName());
         verify(loansRepository, times(1)).findById(1);
         verify(loansRepository, times(1)).save(oldLoanee);
@@ -153,7 +153,7 @@ class LoansServiceTest {
     void testUpdateNotFound(){
         // Given
         Loans newLoanee = new Loans();
-        newLoanee.setLoaneeId(1);
+        newLoanee.setLoanId(1);
         newLoanee.setLoaneeName("Jane Smith");
         newLoanee.setLoaneeInstitution("University of Technology");
         newLoanee.setLoaneeEmail("janesmith@example.com");
@@ -181,7 +181,7 @@ class LoansServiceTest {
         // Given
         Loans loanee = new Loans();
 
-        loanee.setLoaneeId(1);
+        loanee.setLoanId(1);
         loanee.setLoaneeName("John Doe");
         loanee.setLoaneeInstitution("National Science Institute");
         loanee.setLoaneeEmail("johndoe@example.com");
@@ -232,7 +232,7 @@ class LoansServiceTest {
         // Given
         Loans loanee = new Loans();
 
-        loanee.setLoaneeId(1);
+        loanee.setLoanId(1);
         loanee.setLoaneeName("John Doe");
         loanee.setLoaneeInstitution("National Science Institute");
         loanee.setLoaneeEmail("johndoe@example.com");
@@ -245,7 +245,7 @@ class LoansServiceTest {
         loanee.setMeteorites(meteorites);
 
         Loans loanee1 = new Loans();
-        loanee1.setLoaneeId(2);
+        loanee1.setLoanId(2);
         loanee1.setLoaneeName("Jane Smith");
         loanee1.setLoaneeInstitution("University of Technology");
         loanee1.setLoaneeEmail("janesmith@example.com");
@@ -277,7 +277,7 @@ class LoansServiceTest {
         // Given
         Loans loanee = new Loans();
 
-        loanee.setLoaneeId(1);
+        loanee.setLoanId(1);
         loanee.setLoaneeName("John Doe");
         loanee.setLoaneeInstitution("National Science Institute");
         loanee.setLoaneeEmail("johndoe@example.com");
@@ -330,7 +330,7 @@ class LoansServiceTest {
         // Given
         Loans loanee = new Loans();
 
-        loanee.setLoaneeId(1);
+        loanee.setLoanId(1);
         loanee.setLoaneeName("John Doe");
         loanee.setLoaneeInstitution("National Science Institute");
         loanee.setLoaneeEmail("johndoe@example.com");
