@@ -35,7 +35,7 @@ public class LoansController {
      * The method filters loans in-memory after retrieving a page of loans based on sorting criteria.
      * This is suitable for smaller datasets. For bigger datasets, filter via database.
      *
-     * @param loaneeId Optional ID of the loanee to filter by.
+     * @param loanId Optional ID of the loanee to filter by.
      * @param loaneeName Optional name of the loanee to filter by.
      * @param loaneeInstitution Optional institution associated with the loanee to filter by.
      * @param loaneeEmail Optional email of the loanee to filter by.
