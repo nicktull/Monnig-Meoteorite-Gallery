@@ -4,6 +4,8 @@ import edu.tcu.cs.monning_meteorite_gallery.loans.Loans;
 import edu.tcu.cs.monning_meteorite_gallery.loans.LoansRepository;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.Meteorite;
 import edu.tcu.cs.monning_meteorite_gallery.meteorite.MeteoriteRepository;
+import edu.tcu.cs.monning_meteorite_gallery.meteoriteUser.MeteoriteUser;
+import edu.tcu.cs.monning_meteorite_gallery.meteoriteUser.UserService;
 import edu.tcu.cs.monning_meteorite_gallery.samplehistory.SampleHistory;
 import edu.tcu.cs.monning_meteorite_gallery.samplehistory.SampleHistoryRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -14,13 +16,14 @@ public class DBDataInitializer implements CommandLineRunner {
 
     private final MeteoriteRepository meteoriteRepository;
     private final LoansRepository loansRepository;
-
     private final SampleHistoryRepository sampleHistoryRepository;
+    private final UserService userService;
 
-    public DBDataInitializer(MeteoriteRepository meteoriteRepository, LoansRepository loansRepository, SampleHistoryRepository sampleHistoryRepository) {
+    public DBDataInitializer(MeteoriteRepository meteoriteRepository, LoansRepository loansRepository, SampleHistoryRepository sampleHistoryRepository, UserService userService) {
         this.meteoriteRepository = meteoriteRepository;
         this.loansRepository = loansRepository;
         this.sampleHistoryRepository = sampleHistoryRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -115,5 +118,31 @@ public class DBDataInitializer implements CommandLineRunner {
         sampleHistoryRepository.save(entry1);
         sampleHistoryRepository.save(entry2);
 
+
+        // Create some users.
+        MeteoriteUser u1 = new MeteoriteUser();
+        u1.setId(1);
+        u1.setUsername("john");
+        u1.setPassword("123456");
+        u1.setEnabled(true);
+        u1.setRoles("admin user");
+
+        MeteoriteUser u2 = new MeteoriteUser();
+        u2.setId(2);
+        u2.setUsername("eric");
+        u2.setPassword("654321");
+        u2.setEnabled(true);
+        u2.setRoles("user");
+
+        MeteoriteUser u3 = new MeteoriteUser();
+        u3.setId(3);
+        u3.setUsername("tom");
+        u3.setPassword("qwerty");
+        u3.setEnabled(false);
+        u3.setRoles("user");
+
+        this.userService.save(u1);
+        this.userService.save(u2);
+        this.userService.save(u3);
     }
 }
