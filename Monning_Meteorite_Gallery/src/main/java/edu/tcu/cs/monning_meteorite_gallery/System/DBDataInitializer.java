@@ -122,21 +122,21 @@ public class DBDataInitializer implements CommandLineRunner {
         // Create some users.
         MeteoriteUser u1 = new MeteoriteUser();
         u1.setId(1);
-        u1.setUsername("john");
+        u1.setUsername("john@tcu.edu");
         u1.setPassword("123456");
         u1.setEnabled(true);
         u1.setRoles("admin user");
 
         MeteoriteUser u2 = new MeteoriteUser();
         u2.setId(2);
-        u2.setUsername("eric");
+        u2.setUsername("eric@tcu.edu");
         u2.setPassword("654321");
         u2.setEnabled(true);
         u2.setRoles("user");
 
         MeteoriteUser u3 = new MeteoriteUser();
         u3.setId(3);
-        u3.setUsername("tom");
+        u3.setUsername("tom@tcu.edu");
         u3.setPassword("qwerty");
         u3.setEnabled(false);
         u3.setRoles("user");
