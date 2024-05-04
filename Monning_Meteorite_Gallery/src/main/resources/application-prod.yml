@@ -1,0 +1,16 @@
+#spring:
+#  cloud:
+#    azure:
+#      keyfault:
+#        secret:
+#          property-sources[0]:
+#            endpoint: ${AZURE_KEY_VAULT_ENDPOINT} # environment variable
+#  datasource:
+#    # URL of PostgreSQL in Azure
+#    url: ${datasource-url} # secret from Azure key fault
+#    username: ${datasource-username} # secret from Azure key fault
+#    password: ${datasource-password} # secret from Azure key fault
+#  jpa:
+#    hibernate:
+#      ddl-auto: none # Turn off the DDL auto generation
+#

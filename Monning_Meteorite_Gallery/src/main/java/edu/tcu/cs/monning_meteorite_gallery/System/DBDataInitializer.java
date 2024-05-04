@@ -9,6 +9,7 @@ import edu.tcu.cs.monning_meteorite_gallery.meteoriteUser.UserService;
 import edu.tcu.cs.monning_meteorite_gallery.samplehistory.SampleHistory;
 import edu.tcu.cs.monning_meteorite_gallery.samplehistory.SampleHistoryRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -11,10 +11,11 @@
     <groupId>edu.tcu.cs</groupId>
     <artifactId>Monning_Meteorite_Gallery</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Monning_Meteorite_Gallery</name>
-    <description>Monning_Meteorite_Gallery</description>
+    <name>Monnig_Meteorite_Gallery</name>
+    <description>Monnig_Meteorite_Gallery</description>
     <properties>
         <java.version>22</java.version>
+        <spring-cloud-azure.version>5.7.0</spring-cloud-azure.version>
     </properties>
     <dependencies>
         <dependency>
@@ -37,6 +38,12 @@
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -57,7 +64,24 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.azure.spring</groupId>
+            <artifactId>spring-cloud-azure-starter-keyvault</artifactId>
+        </dependency>
     </dependencies>
+
+<!--    The Spring Cloud Azure Bill of Materials (BOM)-->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.azure.spring</groupId>
+                <artifactId>spring-cloud-azure-dependencies</artifactId>
+                <version>${spring-cloud-azure.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
