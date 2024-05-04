@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>edu.tcu.cs</groupId>
-    <artifactId>Monning_Meteorite_Gallery</artifactId>
+    <artifactId>Monnig_Meteorite_Gallery</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Monnig_Meteorite_Gallery</name>
     <description>Monnig_Meteorite_Gallery</description>
