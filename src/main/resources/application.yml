@@ -1,6 +1,6 @@
 #spring:
 #  profiles:
-#    active: prod # By default, the active profile is "dev". During production, it will be replaced to "prod" due to Azures environment variables.
+#    active: dev # By default, the active profile is "dev". During production, it will be replaced to "prod" due to Azures environment variables.
 #  jpa:
 #    hibernate:
 #      ddl-auto: none # Turn off the DDL auto generation.
@@ -18,3 +18,5 @@ spring:
 api:
   endpoint:
       base-url: /api/v1
+server:
+  port: 80

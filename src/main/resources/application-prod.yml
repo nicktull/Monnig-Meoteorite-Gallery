@@ -13,4 +13,4 @@
 #  jpa:
 #    hibernate:
 #      ddl-auto: none # Turn off the DDL auto generation
-#
+
