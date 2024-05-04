@@ -13,7 +13,6 @@ spring:
 #      ddl-auto: none # Turn off the DDL auto generation.
 api:
   endpoint:
-
     base-url: /api/v1
 server:
   port: 80
