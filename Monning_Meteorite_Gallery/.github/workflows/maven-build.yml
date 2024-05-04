@@ -25,4 +25,4 @@ jobs:
       - name: Build and test with Maven
         run: mvn --batch-mode package
 
-        #maven-build updated to 22 to support Docker
+        #maven-build updated to 22 to support Dock
